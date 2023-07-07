@@ -1,5 +1,6 @@
 const { buildPoseidon } = require("circomlibjs")
 const bigintConversion = require('bigint-conversion')
+const { plonk } = require("snarkjs")
 
 const shuffleArray = (array) => {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -62,7 +63,17 @@ exports.initMineField = (width, height, x, y, cnt) => {
         }
     }
 
-    return mineField;
+    return mineField.map((item) => {
+        if (item === "x") {
+            return 10
+        } else {
+            return Number(item)
+        }
+    });
+}
+
+exports.initBlankField = (width, height) => {
+    return Array(width * height).fill(0);
 }
 
 exports.hashItems = async (items) => {
@@ -80,7 +91,7 @@ exports.dummyMineField = () => {
     let result = []
     for (let item of seed) {
         if (item === "x") {
-            result.push(-1)
+            result.push(10)
         } else {
             result.push(Number(item))
         }
@@ -107,4 +118,12 @@ exports.preImage = (items) => {
         output += Number(item)
     }
     return output
+}
+
+exports.proveToProof = async (prove) => {
+
+    const calldata = await plonk.exportSolidityCallData(prove.proof, prove.publicSignals)
+    const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
+
+    return proof
 }
