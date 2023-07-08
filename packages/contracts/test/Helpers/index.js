@@ -121,9 +121,9 @@ exports.preImage = (items) => {
 }
 
 exports.proveToProof = async (prove) => {
-
     const calldata = await plonk.exportSolidityCallData(prove.proof, prove.publicSignals)
     const proof = JSON.parse(calldata.substring(0, calldata.indexOf("]") + 1))
-
     return proof
 }
+
+exports.getIndexFromCoordinates = (x, y, w) => y * w + x;
