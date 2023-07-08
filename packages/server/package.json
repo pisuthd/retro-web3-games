@@ -1,0 +1,54 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "> TODO: description",
+  "author": "pisuthd <pisuth.dae@gmail.com>",
+  "homepage": "https://github.com/pisuthd/retro-web3-games#readme",
+  "license": "MIT",
+  "main": "lib/server.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pisuthd/retro-web3-games.git"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cross-blob": "^3.0.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "fastq": "^1.15.0",
+    "hnswlib-node": "^1.4.2",
+    "keccak256": "^1.0.6", 
+    "merkletreejs": "^0.3.10",
+    "node-fetch": "^3.3.1",
+    "axios": "^1.4.0",
+    "bigint-conversion": "^2.4.1",
+    "circomlibjs": "^0.1.7",
+    "crypto-pouch": "^4.0.1",
+    "ethers": "5.7.1",
+    "langchain": "^0.0.92",
+    "pouchdb": "^8.0.1",
+    "pouchdb-adapter-memory": "^8.0.1",
+    "snarkjs": "^0.7.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "mocha": "^10.2.0"
+  },
+  "scripts": {
+    "dev": "node ./lib/index.js",
+    "test": "mocha --timeout 60000 --reporter spec test/*.js"
+  },
+  "bugs": {
+    "url": "https://github.com/pisuthd/retro-web3-games/issues"
+  }
+}

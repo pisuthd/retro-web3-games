@@ -10,8 +10,7 @@ import { handleAction, initMineField, initBlankField, Cell } from "./minesweeper
 
 export class ServerLib extends Base {
 
-    provider
-    contractAddress
+    provider 
 
     constructor(args) {
         super()
@@ -19,9 +18,9 @@ export class ServerLib extends Base {
         if (args && args.provider) {
             this.provider = args.provider
         }
-        if (args && args.contractAddress) {
-            this.contractAddress = args.contractAddress
-        }
+        // if (args && args.contractAddress) {
+        //     this.contractAddress = args.contractAddress
+        // }
 
     }
 
@@ -76,6 +75,10 @@ export class ServerLib extends Base {
         return activeGame
     }
 
+    getBlockNumber = async () => {
+        return this.provider.getBlockNumber()
+    }
+
     generateProof = async (commitment, position) => {
 
         const game = await this.getActiveGame(commitment)
@@ -123,11 +126,7 @@ export class ServerLib extends Base {
             throw new Error("Provider is not set!")
         }
 
-        if (!this.contractAddress) {
-            throw new Error("Contract address is not set!")
-        }
-
-        console.log("checking tx : ", hash)
+        // console.log("checking tx : ", hash)
 
         const txInfo = await this.provider.getTransaction(hash);
 
@@ -136,7 +135,7 @@ export class ServerLib extends Base {
 
         const position = input[0]
 
-        console.log("revealing position : ", position)
+        // console.log("revealing position : ", position)
 
         const game = await this.getActiveGame(commitment)
 

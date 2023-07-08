@@ -24,8 +24,7 @@ describe("#msweeper", () => {
 
         // init server instance
         server = new ServerLib({
-            provider: ethers.provider,
-            contractAddress: contract
+            provider: ethers.provider
         })
         // use in-memory db
         server.useMemory()
