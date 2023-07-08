@@ -1,8 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
 
-// require("dotenv").config()
+require("dotenv").config()
 
-// const PRIVATE_KEY = process.env.PRIVATE_KEY
+const PRIVATE_KEY = process.env.PRIVATE_KEY
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -19,10 +19,10 @@ module.exports = {
     },
   },
   networks: {
-    // bnbTestnet: {
-    //   chainId: 97,
-    //   url: "https://data-seed-prebsc-2-s1.binance.org:8545",
-    //   accounts: [PRIVATE_KEY],
-    // }
+    sandverse: {
+      chainId: 20197,
+      url: "https://rpc.sandverse.oasys.games",
+      accounts: [PRIVATE_KEY],
+    }
   }
 };

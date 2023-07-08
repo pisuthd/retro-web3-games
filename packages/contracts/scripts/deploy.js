@@ -7,20 +7,20 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const verifier = await hre.ethers.deployContract("Verifier", [], { gasLimit: "0x1000000" });
 
-  const lockedAmount = hre.ethers.utils.parseEther("0.001");
+  console.log("deploying verifier...")
+  
+  await verifier.waitForDeployment();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  console.log("deploying msweeper...")
 
-  await lock.deployed();
+  const msweeper = await hre.ethers.deployContract("Minesweeper", [verifier.target ], { gasLimit: "0x1000000" });
+
+  await msweeper.waitForDeployment();
 
   console.log(
-    `Lock with ${ethers.utils.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `Deployed Minesweeper contract to ${msweeper.target}`
   );
 }
 
