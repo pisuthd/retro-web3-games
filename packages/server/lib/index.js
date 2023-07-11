@@ -69,9 +69,9 @@ app.post('/proof', async (req, res) => {
     const { body } = req
     const { commitment, position } = body
 
-    const proof = await serverLib.generateProof(commitment, position)
+    const { proof, publicSignals } = await serverLib.generateProof(commitment, position)
 
-    return res.status(200).json({ status: "ok" , proof});
+    return res.status(200).json({ status: "ok" , proof, publicSignals});
   } catch (e) {
     return res.status(400).json({ status: "error", error: e.message });
   }
@@ -83,9 +83,9 @@ app.post('/update', async (req, res) => {
 
   try {
     const { body } = req
-    const { commitment, tx } = body
+    const { commitment, tx, flag } = body
 
-    await serverLib.updateState(commitment, tx)
+    await serverLib.updateState(commitment, tx, flag)
 
     return res.status(200).json({ status: "ok" });
   } catch (e) {

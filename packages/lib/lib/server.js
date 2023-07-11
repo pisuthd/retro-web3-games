@@ -6,11 +6,11 @@ import { DEFAULT_MESSAGE, ACTIVE_GAMES_TABLE } from "./constants";
 import { plonk } from "snarkjs"
 import MinesweeperABI from "./abi/Minesweeper.json"
 
-import { handleAction, initMineField, initBlankField, Cell } from "./minesweeper";
+import { handleAction, initMineField, initBlankField, Cell, addFlag } from "./minesweeper";
 
 export class ServerLib extends Base {
 
-    provider 
+    provider
 
     constructor(args) {
         super()
@@ -34,10 +34,17 @@ export class ServerLib extends Base {
             }
         })
 
+        
+
         const initField = initBlankField(16, 16)
         const commitment = await this.hashItems(mineField)
 
         const db = this.getDb(ACTIVE_GAMES_TABLE)
+
+        const game = await this.getActiveGame(commitment)
+        if (game) {
+            await db.remove(game)
+        }
 
         await db.put({
             _id: `${commitment}`,
@@ -102,6 +109,7 @@ export class ServerLib extends Base {
                     if (item === Cell.open8) item = 8
                     if (item === Cell.bombdeath) item = 10
                     if (item === Cell.bombrevealed) item = 10
+                    if (item === Cell.bombflagged) item = 10
                     if (item === Cell.blank) item = 0
                     return item
                 }),
@@ -112,7 +120,11 @@ export class ServerLib extends Base {
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
         )
-        return (await this.proveToProof(prove))
+
+        return {
+            proof: await this.proveToProof(prove),
+            publicSignals: prove.publicSignals
+        }
     }
 
     proveToProof = async (prove) => {
@@ -121,7 +133,7 @@ export class ServerLib extends Base {
         return proof
     }
 
-    updateState = async (commitment, hash) => {
+    updateState = async (commitment, hash, flag = false) => {
         if (!this.provider) {
             throw new Error("Provider is not set!")
         }
@@ -130,32 +142,62 @@ export class ServerLib extends Base {
 
         const txInfo = await this.provider.getTransaction(hash);
 
-        const iface = new ethers.utils.Interface(['function reveal(uint8 position, uint256[24] proof)'])
-        const input = iface.decodeFunctionData('reveal', txInfo.data)
+        let position
 
-        const position = input[0]
+        if (!flag) {
+            const iface = new ethers.utils.Interface(['function reveal(uint8 position, uint256[24] proof, uint256[2] calldata publicSignals)'])
+            const input = iface.decodeFunctionData('reveal', txInfo.data)
+            position = input[0]
 
-        // console.log("revealing position : ", position)
+            const game = await this.getActiveGame(commitment)
 
-        const game = await this.getActiveGame(commitment)
+            if (!game) {
+                throw new Error("There is no state from the given commitment")
+            }
 
-        if (!game) {
-            throw new Error("There is no state from the given commitment")
+            const { state, solution } = game
+
+            const updatedState = handleAction(state, solution, position)
+
+            // update state on db
+            const db = this.getDb(ACTIVE_GAMES_TABLE)
+
+            await db.put({
+                _id: `${commitment}`,
+                _rev: game["_rev"],
+                solution: game["solution"],
+                state: updatedState
+            })
+
+        } else {
+
+            const iface = new ethers.utils.Interface(['function flag(uint8 position, uint256[24] proof, uint256[2] calldata publicSignals)'])
+            const input = iface.decodeFunctionData('flag', txInfo.data)
+            position = input[0]
+
+            const game = await this.getActiveGame(commitment)
+
+            if (!game) {
+                throw new Error("There is no state from the given commitment")
+            }
+
+            const { state, solution } = game
+
+            const updatedState = addFlag(state, solution, position)
+
+            // update state on db
+            const db = this.getDb(ACTIVE_GAMES_TABLE)
+
+            await db.put({
+                _id: `${commitment}`,
+                _rev: game["_rev"],
+                solution: game["solution"],
+                state: updatedState
+            })
+
         }
 
-        const { state, solution } = game
 
-        const updatedState = handleAction(state, solution, position)
-
-        // update state on db
-        const db = this.getDb(ACTIVE_GAMES_TABLE)
-
-        await db.put({
-            _id: `${commitment}`,
-            _rev: game["_rev"],
-            solution: game["solution"],
-            state: updatedState
-        })
 
     }
 

@@ -20,7 +20,6 @@ export const Cell = {
     open8: 'open8',
 }
 
-
 const revealBoardOnDeath = (oldBoard, mineField, deathIndex) => {
     const newBoard = [...oldBoard];
     for (let i = 0; i < oldBoard.length; ++i) {
@@ -48,6 +47,24 @@ const revealBoardOnDeath = (oldBoard, mineField, deathIndex) => {
     return newBoard;
 }
 
+const addFlagToBoard = (oldBoard, mineField, flagIndex) => {
+    const newBoard = [...oldBoard];
+    for (let i = 0; i < oldBoard.length; ++i) {
+        const cell = oldBoard[i];
+        const f = mineField[i];
+
+        if (!isBlank(cell)) {
+            continue;
+        } else {
+            if (isBomb(f) && flagIndex === i) {
+                newBoard[i] = Cell.bombflagged
+            }
+        }
+
+    }
+    return newBoard;
+}
+
 export const handleAction = (state, solution, position) => {
 
     const cell = state[position];
@@ -59,6 +76,23 @@ export const handleAction = (state, solution, position) => {
 
     if (isBomb(field)) {
         return revealBoardOnDeath(state, solution, position)
+    }
+
+    const newBoard = revealBoardOnClick(state, solution, position, WIDTH);
+    return newBoard
+}
+
+export const addFlag = (state, solution, position) => {
+
+    const cell = state[position];
+    const field = solution[position];
+
+    if (!solution || !isBlank(cell)) {
+        return state;
+    }
+
+    if (isBomb(field)) {
+        return addFlagToBoard(state, solution, position)
     }
 
     const newBoard = revealBoardOnClick(state, solution, position, WIDTH);
