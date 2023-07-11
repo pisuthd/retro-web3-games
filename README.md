@@ -62,7 +62,7 @@ npm run test
 
 By default, the frontend is initially configured to connect to the smart contract that we have deployed on Oasys Sandverse chain. 
 
-However, if you wish to deploy a new contract and then need to replace the new contract address in `packages/client/src/constants.js`
+However, if you wish to deploy a new contract, you then need to replace the new contract address in `packages/client/src/constants.js`
 
 ```
 export const contractAddress = "0xB2987B64f29E194b6134255bC960Da91183a06B0" // replace with your contract here
