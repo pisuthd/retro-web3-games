@@ -1,8 +1,8 @@
 # RetroWeb3.Games
 
-RetroWeb3.Games is a platform that collects classic/retro games in Web3 utilizing the Oasys blockchain and zkSNARK. By transforming games that many people are already familiar with into Web3 versions it can eliminate the learning curve and enable anyone to seamlessly experience Web3 gaming.
+RetroWeb3.Games is a platform that collects classic/retro games in Web3 utilizing the Oasys blockchain and zkSNARK. By transforming games that many people are already familiar with into Web3 versions, it can eliminate the learning curve and enable anyone to seamlessly experience Web3 gaming.
 
-The integration of zkSNARK allows us to ensure efficient game generation and execution, combining the scalability of off-chain processing with the trustless nature of on-chain smart contracts. Players can enjoy the benefits of off-chain game generation while maintaining the immutability and integrity of on-chain execution.
+The integration of zkSNARK allows us to ensure efficient game generation and execution, combining the scalability of off-chain processing with the trustless nature of on-chain smart contracts.
 
 - [Live URL](https://www.retroweb3.games)
 - [YouTube](https://youtu.be/l0b7pecqp90)
@@ -43,7 +43,7 @@ Since we are using Lerna, all dependencies across all packages can be installed 
 npm run bootstrap
 ```
 
-Most of the core libraries that the project is using require Node.js 18. Make sure you have it installed, otherwise, erros may occur.
+Most of the core libraries that the project is using require Node.js 18. Make sure you have it installed, otherwise, errors may occur.
 
 ### Tests
 
