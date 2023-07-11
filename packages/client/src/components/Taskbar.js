@@ -11,25 +11,42 @@ const Link = styled.a`
 `
 
 const Taskbar = () => {
-    
-    const  {account } = useWeb3React()
 
-    const { disconnect } = useContext(AccountContext) 
+    const { account } = useWeb3React()
 
-    const { showAboutModal, showSignInModal } = useContext(ModalContext)
+    const { disconnect, corrected } = useContext(AccountContext)
 
-    const toggleSecond = (x) => {
-
-    }
-
-    const toggleFirst = (x) => {
-
-    }
+    const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
 
     return (
         <TaskBar
             list={
-                <List> 
+                <List>
+                    {/* <List.Item
+                        icon={<Progman36 variant="32x32_4" />}
+                        onClick={() => {
+                            toggleFirst(true);
+                        }}
+                    >
+                        Deposit OAS
+                    </List.Item> */}
+                    <List.Item icon={<FolderExe2 variant="32x32_4" />}>
+                        <List>
+                            <List.Item
+                                icon={<Winmine1 variant="16x16_4" />}
+                                onClick={() => {
+                                    if (account && corrected) {
+                                        showMinesweeperModal()
+                                    } else {
+                                        alert("Connect wallet first!")
+                                    }
+                                }}
+                            >
+                                Minesweeper
+                            </List.Item>
+                        </List>
+                        Programs
+                    </List.Item>
                     <List.Item
                         icon={<Dialmon200 variant="32x32_4" />}
                         onClick={() => {
@@ -37,22 +54,6 @@ const Taskbar = () => {
                         }}
                     >
                         Connect Wallet
-                    </List.Item>
-                    <List.Item
-                        icon={<Progman36 variant="32x32_4" />}
-                        onClick={() => {
-                            toggleFirst(true);
-                        }}
-                    >
-                        Deposit OAS
-                    </List.Item>
-                    <List.Item icon={<FolderExe2 variant="32x32_4" />}>
-                        <List>
-                            <List.Item icon={<Winmine1 variant="16x16_4" />}>
-                                Minesweeper
-                            </List.Item>
-                        </List>
-                        Programs
                     </List.Item>
                     <List.Item
                         icon={<InfoBubble variant="32x32_4" />}

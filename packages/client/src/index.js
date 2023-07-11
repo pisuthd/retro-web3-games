@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, GlobalStyle } from '@react95/core';
 import ModalProvider from "./hooks/useModal"
 import AccountProvider from "./hooks/useAccount"
+import MinesweeperProvider from './hooks/useMinesweeper';
 import '@react95/icons/icons.css';
 
 // const BodyFontSizeOverride = createGlobalStyle`
@@ -28,13 +29,15 @@ root.render(
   <>
     <Web3ReactProvider getLibrary={getLibrary}>
       <AccountProvider>
-        <ModalProvider>
-          <ThemeProvider>
-            <GlobalStyle />
-            {/* <BodyFontSizeOverride /> */}
-            <App />
-          </ThemeProvider>
-        </ModalProvider>
+        <MinesweeperProvider>
+          <ModalProvider>
+            <ThemeProvider>
+              <GlobalStyle />
+              {/* <BodyFontSizeOverride /> */}
+              <App />
+            </ThemeProvider>
+          </ModalProvider>
+        </MinesweeperProvider>
       </AccountProvider>
     </Web3ReactProvider>
   </>

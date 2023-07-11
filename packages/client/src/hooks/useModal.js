@@ -6,7 +6,8 @@ export const ModalContext = createContext()
 
 export const MODAL = {
     ABOUT: "ABOUT",
-    SIGN_IN: "SIGN_IN"
+    SIGN_IN: "SIGN_IN",
+    MINESWEEPER: "MINESWEEPER"
 }
 
 const Provider = ({ children }) => {
@@ -24,8 +25,16 @@ const Provider = ({ children }) => {
         dispatch({ modals: modals.filter(item => item !== MODAL.ABOUT) })
     }, [modals])
 
+    const showMinesweeperModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.MINESWEEPER]) })
+    }, [modals])
+
     const showAboutModal = useCallback(() => {
         dispatch({ modals: modals.concat([MODAL.ABOUT]) })
+    }, [modals])
+
+    const closeMinesweeperModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.MINESWEEPER) })
     }, [modals])
 
     const closeSignInModal = useCallback(() => {
@@ -42,7 +51,9 @@ const Provider = ({ children }) => {
             closeAboutModal,
             showAboutModal,
             closeSignInModal,
-            showSignInModal
+            showSignInModal,
+            showMinesweeperModal,
+            closeMinesweeperModal
         }),
         [modals]
     )

@@ -10,10 +10,10 @@
     "@testing-library/user-event": "^13.5.0",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "6.0.7",
-    "react-blockies": "^1.4.1",
-    "ethers": "5.7.1",
     "axios": "^1.4.0",
+    "ethers": "5.7.1",
     "react": "^18.2.0",
+    "react-blockies": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "styled-component": "^2.8.0",
@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build", 
+    "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

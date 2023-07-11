@@ -54,14 +54,14 @@ const Shortcuts = () => {
 
   const { account } = useWeb3React()
 
-  const [totalEth, setTotalEth ] = useState()
-  
+  const [totalEth, setTotalEth] = useState()
+
   const { corrected, getBalance } = useContext(AccountContext)
-  const { showAboutModal, showSignInModal } = useContext(ModalContext)
+  const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
 
   useEffect(() => {
     account && getBalance().then(setTotalEth)
-  },[account])
+  }, [account])
 
   return (
     <Wrapper>
@@ -79,7 +79,7 @@ const Shortcuts = () => {
           <br />
           Wallet
         </IconContainer>
-        <IconContainer>
+        {/* <IconContainer>
           <Progman36
             title={"Deposit OAS tokens"}
             variant="32x32_4"
@@ -89,16 +89,24 @@ const Shortcuts = () => {
           Deposit
           <br />
           OAS
-        </IconContainer>
-        <IconContainer>
+        </IconContainer> */}
+        <IconContainer
+          onClick={() => {
+            if (account && corrected) {
+              showMinesweeperModal()
+            } else {
+              alert("Connect wallet first!")
+            }
+          }}
+        >
           <Winmine1
             title={"Play Minesweeper"}
             variant="32x32_4"
             className='pointer'
-            onClick={() => alert("hello")}
           />
           Minesweeper
         </IconContainer>
+
         <IconContainer
           onClick={() => showAboutModal()}
         >
@@ -119,39 +127,18 @@ const Shortcuts = () => {
             {!account && (
               <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
                 <div>Not Connected</div>
-                {/* <div style={{ padding: "5px", fontSize: "11px" }}>
-                  Support <a href="https://docs.oasys.games/docs/staking/rpc-endpoint/1-1-rpc-endpoint" target="_blank">Oasys Testnet</a> only
-                </div> */}
               </div>
             )}
 
             {(account && !corrected) && (
               <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>Please switch to Oasys Testnet (Id: 9372 )</div>
+                <div>Please switch to Oasys SAND Verse (Id: 20197 )</div>
               </div>
             )}
 
             {(account && corrected) && (
-              <div style={{ textAlign: "center", padding: "5px" }}> 
-                <div
-                  style={{ marginBottom: "10px" }}
-                >
-                  <Blockies
-                    seed={account}
-                    size="15" 
-                  />
-                </div>
-                {/* <div>
-                  Name : {shortAddress(account)}
-                </div> */}
-                <div style={{ display: "flex", flexDirection: "row", padding: "10px", paddingBottom :"5px" }}>
-                  <div style={{ flex: 1 }}>
-                    Balance: {totalEth} OAS
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    Deposited : {0} OAS
-                  </div>
-                </div>
+              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
+                <div>{shortAddress(account)}</div>
               </div>
             )}
 

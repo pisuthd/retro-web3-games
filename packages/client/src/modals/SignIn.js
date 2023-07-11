@@ -57,7 +57,7 @@ const SignIn = ({ closeModal }) => {
                 <h3>MetaMask</h3>
             </StyledButton>
             <div style={{ padding: "5px", fontSize: "11px", textAlign :"center" }}>
-                Support <a href="https://docs.oasys.games/docs/staking/rpc-endpoint/1-1-rpc-endpoint" target="_blank">Oasys Testnet</a> only
+                Support <a href="https://docs.oasys.games/docs/staking/rpc-endpoint/1-1-rpc-endpoint" target="_blank">Oasys SAND Verse</a> only
             </div>
         </Modal>
     )
