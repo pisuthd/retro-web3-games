@@ -116,7 +116,7 @@ contract Minesweeper {
 
         // no bomb
         if ((verifier).verifyProof(proof, [ 0,  games[id].solution ])) {
-            games[id].board[position] == Cell.pressed;
+            games[id].board[position] = Cell.pressed;
         }
 
         // has a bomb
@@ -149,7 +149,7 @@ contract Minesweeper {
 
         // no bomb
         if ((verifier).verifyProof(proof, [ 0,  games[id].solution ])) {
-            games[id].board[position] == Cell.pressed;
+            games[id].board[position] = Cell.pressed;
         }
 
         // has a bomb
