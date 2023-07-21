@@ -37,7 +37,7 @@ contract Minesweeper {
     }
 
     // DEFAULT GAME CONFIG
-    uint8 constant MINES = 10;
+    uint8 constant MINES = 20;
     uint8 constant WIDTH = 16;
     uint8 constant HEIGHT = 16;
     uint256 constant LENGTH = 256;

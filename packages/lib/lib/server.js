@@ -24,7 +24,7 @@ export class ServerLib extends Base {
 
     }
 
-    requestGameCreation = async (mines = 10) => {
+    requestGameCreation = async (mines = 20) => {
 
         const mineField = initMineField(16, 16, random(0, 16), random(0, 16), mines).map((item) => {
             if (item === "x") {
