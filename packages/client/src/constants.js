@@ -11,6 +11,6 @@ export const Connectors = [
     }
 ]
 
-export const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || "0xB2987B64f29E194b6134255bC960Da91183a06B0"
+export const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS || "0x3Fd0D595876c099eAeDA4A42e48fabdDe2a2b044"
 
 export const host = process.env.REACT_APP_HOST || "http://localhost:8000"
