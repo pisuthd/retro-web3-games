@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { buildPoseidon } from "circomlibjs"
 import { random, getIndexFromCoordinates } from "./helpers"
 import { Base } from "./base"
-import { DEFAULT_MESSAGE, ACTIVE_GAMES_TABLE } from "./constants";
+import { DEFAULT_MESSAGE, ACTIVE_GAMES_TABLE, DEFAULT_SEED } from "./constants";
 import { plonk } from "snarkjs"
 import MinesweeperABI from "./abi/Minesweeper.json"
 
@@ -24,7 +24,7 @@ export class ServerLib extends Base {
 
     }
 
-    requestGameCreation = async (mines = 40) => {
+    requestGameCreation = async (mines = 10) => {
 
         const mineField = initMineField(16, 16, random(0, 16), random(0, 16), mines).map((item) => {
             if (item === "x") {
@@ -114,8 +114,8 @@ export class ServerLib extends Base {
                     return item
                 }),
                 solution: game.solution,
-                commitment,
-                solutionAtPosition: game.solution[position]
+                solutionAtPosition: game.solution[position],
+                seed : DEFAULT_SEED
             },
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
@@ -145,7 +145,7 @@ export class ServerLib extends Base {
         let position
 
         if (!flag) {
-            const iface = new ethers.utils.Interface(['function reveal(uint8 position, uint256[24] proof, uint256[2] calldata publicSignals)'])
+            const iface = new ethers.utils.Interface(['function reveal(uint8 position, uint256[24] proof, uint256[1] calldata publicSignals)'])
             const input = iface.decodeFunctionData('reveal', txInfo.data)
             position = input[0]
 
@@ -171,7 +171,7 @@ export class ServerLib extends Base {
 
         } else {
 
-            const iface = new ethers.utils.Interface(['function flag(uint8 position, uint256[24] proof, uint256[2] calldata publicSignals)'])
+            const iface = new ethers.utils.Interface(['function flag(uint8 position, uint256[24] proof, uint256[1] calldata publicSignals)'])
             const input = iface.decodeFunctionData('flag', txInfo.data)
             position = input[0]
 

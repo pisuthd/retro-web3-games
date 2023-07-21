@@ -4,6 +4,8 @@ const { plonk } = require("snarkjs")
 
 const { initMineField, hashItems, initBlankField, proveToProof } = require("./Helpers")
 
+const SEED = 1234
+
 describe("#contracts", () => {
 
     let contract
@@ -29,6 +31,9 @@ describe("#contracts", () => {
         await contract.create(commitment)
 
         const currentGameId = await contract.currentGameId()
+
+        await contract.overrideMines(currentGameId, 40);
+
         const state = await contract.getGameState(currentGameId)
 
         expect(state.minesCounter).to.equal(40)
@@ -55,14 +60,14 @@ describe("#contracts", () => {
                     position,
                     solved,
                     solution: mineField,
-                    commitment,
-                    solutionAtPosition: mineField[position]
+                    solutionAtPosition: mineField[position],
+                    seed: SEED
                 },
                 `./circuits/puzzle.wasm`,
                 `./circuits/puzzle.zkey`
             )
 
-            await contract.reveal(position, await proveToProof(prove))
+            await contract.reveal(position, await proveToProof(prove), prove.publicSignals)
 
             solved[position] = mineField[position]
         }
@@ -81,6 +86,7 @@ describe("#contracts", () => {
         await contract.create(commitment)
 
         const currentGameId = await contract.currentGameId()
+        await contract.overrideMines(currentGameId, 40);
         // ID should be increased
         expect(currentGameId).to.equal(1)
 
@@ -101,14 +107,15 @@ describe("#contracts", () => {
                 position: firstPosWithBomb,
                 solved,
                 solution: mineField,
-                commitment,
-                solutionAtPosition: mineField[firstPosWithBomb]
+                // commitment,
+                solutionAtPosition: mineField[firstPosWithBomb],
+                seed: SEED
             },
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
         )
 
-        await contract.reveal(firstPosWithBomb, await proveToProof(prove))
+        await contract.reveal(firstPosWithBomb, await proveToProof(prove), prove.publicSignals)
 
         // the game should be ended
         const state = await contract.getGameState(currentGameId)
@@ -155,14 +162,15 @@ describe("#contracts", () => {
                 position : pos1,
                 solved,
                 solution: mineField,
-                commitment,
-                solutionAtPosition: mineField[pos1]
+                // commitment,
+                solutionAtPosition: mineField[pos1],
+                seed : SEED
             },
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
         )
 
-        await contract.connect(admin).flag(pos1, await proveToProof(prove), {
+        await contract.connect(admin).flag(pos1, await proveToProof(prove) , prove.publicSignals , {
             value : ethers.parseEther("0.1")
         })
 
@@ -174,14 +182,15 @@ describe("#contracts", () => {
                 position : pos2,
                 solved,
                 solution: mineField,
-                commitment,
-                solutionAtPosition: mineField[pos2]
+                // commitment,
+                solutionAtPosition: mineField[pos2],
+                seed : SEED
             },
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
         )
 
-        await contract.connect(alice).flag(pos2, await proveToProof(prove), {
+        await contract.connect(alice).flag(pos2, await proveToProof(prove), prove.publicSignals , {
             value : ethers.parseEther("0.2")
         })
 
@@ -196,14 +205,15 @@ describe("#contracts", () => {
                 position : pos3,
                 solved,
                 solution: mineField,
-                commitment,
-                solutionAtPosition: mineField[pos3]
+                // commitment,
+                solutionAtPosition: mineField[pos3],
+                seed:SEED
             },
             `./circuits/puzzle.wasm`,
             `./circuits/puzzle.zkey`
         )
 
-        await contract.connect(bob).flag(pos3, await proveToProof(prove), {
+        await contract.connect(bob).flag(pos3, await proveToProof(prove), prove.publicSignals , {
             value : ethers.parseEther("0.1")
         })
 

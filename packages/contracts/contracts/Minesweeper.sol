@@ -37,7 +37,7 @@ contract Minesweeper {
     }
 
     // DEFAULT GAME CONFIG
-    uint8 constant MINES = 40;
+    uint8 constant MINES = 10;
     uint8 constant WIDTH = 16;
     uint8 constant HEIGHT = 16;
     uint256 constant LENGTH = 256;
@@ -56,6 +56,8 @@ contract Minesweeper {
     uint256 public gameCount;
     uint256 public minStakeAmount;
 
+    uint256 private seed; // FIXME: should rotates on every transactions
+
     Verifier public verifier;
 
     uint256 public prizePool;
@@ -70,6 +72,9 @@ contract Minesweeper {
         minStakeAmount = 0.1 ether;
 
         verifier = Verifier(_verifier);
+
+        // default seed
+        seed = 1234;
     }
 
     // create new game
@@ -98,7 +103,7 @@ contract Minesweeper {
     }
 
     // reveal cell
-    function reveal(uint8 position, uint256[24] calldata proof) external {
+    function reveal(uint8 position, uint256[24] calldata proof, uint256[1] calldata publicSignals) external {
         uint256 id = _currentGameId();
 
         require(
@@ -114,13 +119,20 @@ contract Minesweeper {
             "The cell is not blank"
         );
 
+        require(
+            (verifier).verifyProof(proof, publicSignals),
+            "SNARK verification failed"
+        );
+
+        uint256 val = uint256(position)+seed;
+
         // no bomb
-        if ((verifier).verifyProof(proof, [ 0,  games[id].solution ])) {
+        if (val == publicSignals[0]) {
             games[id].board[position] = Cell.pressed;
         }
 
         // has a bomb
-        if ((verifier).verifyProof(proof, [ 1,  games[id].solution ])) {
+        if (val+1 == publicSignals[0]) {
             games[id].smileyButton = SmileyButton.facedead;
             games[id].board[position] = Cell.bombdeath;
             games[id].gameEnded = true;
@@ -129,7 +141,7 @@ contract Minesweeper {
     }
 
     // flag cell and must stake at min. stake amount
-    function flag(uint8 position, uint256[24] calldata proof) payable external {
+    function flag(uint8 position, uint256[24] calldata proof, uint256[1] calldata publicSignals) payable external {
         require(msg.value >= minStakeAmount, "Not exceed minStakeAmount");
 
         uint256 id = _currentGameId();
@@ -147,13 +159,20 @@ contract Minesweeper {
             "The cell is not blank"
         );
 
+        require(
+            (verifier).verifyProof(proof, publicSignals),
+            "SNARK verification failed"
+        );
+
+        uint256 val = uint256(position)+seed;
+
         // no bomb
-        if ((verifier).verifyProof(proof, [ 0,  games[id].solution ])) {
+        if (val == publicSignals[0] ) {
             games[id].board[position] = Cell.pressed;
         }
 
         // has a bomb
-        if ((verifier).verifyProof(proof, [ 1,  games[id].solution ])) {
+        if (val+1 == publicSignals[0]) {
             games[id].board[position] = Cell.bombflagged;
             games[id].minesCounter -= 1;
         }
@@ -175,6 +194,10 @@ contract Minesweeper {
     }
 
     // ADMIN FUNCTIONS
+
+    function updateSeed(uint256 _seed) external onlyAdmin {
+        seed = _seed;
+    }
 
     function updateMinStakeAmount(uint256 _amount) external onlyAdmin {
         minStakeAmount = _amount;

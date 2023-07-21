@@ -32,7 +32,7 @@ describe("#msweeper", () => {
 
     it("should create game and play until dead success", async function () {
 
-        const commitment = await server.requestGameCreation()
+        const commitment = await server.requestGameCreation(60)
         const initState = await server.state(commitment)
 
         const sum = initState.reduce((result, item) => {
@@ -43,14 +43,17 @@ describe("#msweeper", () => {
 
         // create new game
         await contract.create(commitment)
+        const currentGameId = await contract.currentGameId()
+        await contract.overrideMines(currentGameId, 60);
 
         let position = initState.indexOf("blank")
 
         // open a cell until dead
         while (true) {
             const proof = await server.generateProof(commitment, position)
+
             // on-chain first
-            const tx = await contract.reveal(position, proof)
+            const tx  = await contract.reveal(position, proof.proof, proof.publicSignals)
             // then update state off-chain
             await server.updateState(commitment, tx.hash)
             const state = await server.state(commitment)
@@ -63,7 +66,6 @@ describe("#msweeper", () => {
 
         }
 
-        const currentGameId = await contract.currentGameId()
         const state = await contract.getGameState(currentGameId)
 
         expect(state.gameEnded).to.equal(true)

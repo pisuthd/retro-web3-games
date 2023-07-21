@@ -25,7 +25,7 @@ import "hardhat/console.sol";
 
 contract Verifier {
     // Omega
-    uint256 constant w1 = 4158865282786404163413953114870269622875596290766033564087307867933865333818;    
+    uint256 constant w1 = 19540430494807482326159819597004422086093766032135589407132600596362845576832;    
     // Scalar field size
     uint256 constant q  = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
     // Base field size
@@ -41,26 +41,26 @@ contract Verifier {
     uint256 constant G2y2 = 4082367875863433681332203403145435568316851327593401208105741076214120093531;
     
     // Verification Key data
-    uint32 constant n         = 4096;
-    uint16 constant nPublic   = 2;
-    uint16 constant nLagrange = 2;
+    uint32 constant n         = 8;
+    uint16 constant nPublic   = 1;
+    uint16 constant nLagrange = 1;
     
-    uint256 constant Qmx  = 7211557374443996192230245944689505932618104620371702755275014620452701577121;
-    uint256 constant Qmy  = 5372620280456475288990698730107597183784885140018435308763280642379960047389;
-    uint256 constant Qlx  = 11372597085796892643640536419862138335558158689882332835099290105139265912050;
-    uint256 constant Qly  = 18353481734206015896297333522584210191798665723440915914387588118646579197560;
-    uint256 constant Qrx  = 21645263594476270212122071478535751929633267466173786214002012552804523613364;
-    uint256 constant Qry  = 8004706925313357991921175464954342579039940423911682646804472454717082077435;
-    uint256 constant Qox  = 473642352701189203130521623726974266123078902094709161062434972018795433542;
-    uint256 constant Qoy  = 14978921653727540739702474687488184513850263418835042296063544052075117325722;
-    uint256 constant Qcx  = 3882275122668721326738807524453819397696372160351655298350423728380519152981;
-    uint256 constant Qcy  = 14988184975597239903613005709198865704944209920211805763655715202334397940255;
-    uint256 constant S1x  = 309961977910225670881140617926846354380234694512112165131778771442844245748;
-    uint256 constant S1y  = 168175524346969088553925747620138061648437840389121096166133384845531314610;
-    uint256 constant S2x  = 2497083008201593948431251807426164759582830011389346028107143072168084823680;
-    uint256 constant S2y  = 4926646553852856162557984663057686194082853769149890098770505903037360463203;
-    uint256 constant S3x  = 21422549554649796526984768760475820042983803802519813098691644623054627404508;
-    uint256 constant S3y  = 18248418123737736893973465793805328708479611549889239568676232576075757594430;
+    uint256 constant Qmx  = 15459564051448063078776968930092155788114959459027459003353338081151849121268;
+    uint256 constant Qmy  = 11769490814573237681595726719466698134184954678936590861569824356880142849386;
+    uint256 constant Qlx  = 13313343959749563962723924184399055118096596435217815127363142127208248549178;
+    uint256 constant Qly  = 16322972120627469041483008013672315325128068665909158643380030411793278302046;
+    uint256 constant Qrx  = 12966075225908093355598050066951600143873524144480708929989457543495366334450;
+    uint256 constant Qry  = 13848216169602536041447542234212195805578998935862634906361212678001112789116;
+    uint256 constant Qox  = 15043531423896296758860625731180396792179806337594295030535891087554220453340;
+    uint256 constant Qoy  = 11177168250823294010268744215516657423177729879713055050085855427201583961125;
+    uint256 constant Qcx  = 11448008371105398943869362113810658997753184086726857543614610338733680103806;
+    uint256 constant Qcy  = 13361296362140295466544589969517567738203269052771333472280549247040570570461;
+    uint256 constant S1x  = 15062215367176905541955907049834019362410207965219814322153137922779359600396;
+    uint256 constant S1y  = 3362674602670388617473222832170572370281582658444306364001014044743325827776;
+    uint256 constant S2x  = 16883124113531323361407382202883276399468265113194093787518376676836454612624;
+    uint256 constant S2y  = 13647470438138650458654853524936904010860179044663741842583035778756386559657;
+    uint256 constant S3x  = 9374908331962335391473544956813640668790046006859158935678988825744623176729;
+    uint256 constant S3y  = 15669814910412225146844976612263266013713703670452083471807389716777407459399;
     uint256 constant k1   = 2;
     uint256 constant k2   = 3;
     uint256 constant X2x1 = 21831381940315734285607113342023901060522397560371972897001948545212302161822;
@@ -116,13 +116,11 @@ contract Verifier {
     
     uint16 constant pEval_l1 = 800;
     
-    uint16 constant pEval_l2 = 832;
     
     
-    
-    uint16 constant lastMem = 864;
+    uint16 constant lastMem = 832;
 
-    function verifyProof(uint256[24] calldata _proof, uint256[2] calldata _pubSignals) public view returns (bool) {
+    function verifyProof(uint256[24] calldata _proof, uint256[1] calldata _pubSignals) public view returns (bool) {
         assembly {
             /////////
             // Computes the inverse using the extended euclidean algorithm
@@ -237,16 +235,14 @@ contract Verifier {
                 
                 mstore(add(mIn, 512), calldataload(add(pPublic, 0)))
                 
-                mstore(add(mIn, 544), calldataload(add(pPublic, 32)))
+                mstore(add(mIn, 544 ), calldataload(pA))
+                mstore(add(mIn, 576 ), calldataload(add(pA, 32)))
+                mstore(add(mIn, 608 ), calldataload(pB))
+                mstore(add(mIn, 640 ), calldataload(add(pB, 32)))
+                mstore(add(mIn, 672 ), calldataload(pC))
+                mstore(add(mIn, 704 ), calldataload(add(pC, 32)))
                 
-                mstore(add(mIn, 576 ), calldataload(pA))
-                mstore(add(mIn, 608 ), calldataload(add(pA, 32)))
-                mstore(add(mIn, 640 ), calldataload(pB))
-                mstore(add(mIn, 672 ), calldataload(add(pB, 32)))
-                mstore(add(mIn, 704 ), calldataload(pC))
-                mstore(add(mIn, 736 ), calldataload(add(pC, 32)))
-                
-                beta := mod(keccak256(mIn, 768), q) 
+                beta := mod(keccak256(mIn, 736), q) 
                 mstore(add(pMem, pBeta), beta)
 
                 // challenges.gamma
@@ -290,24 +286,6 @@ contract Verifier {
                 mstore(add(pMem, pBetaXi), mulmod(beta, aux, q))
 
                 // challenges.xi^n
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
-                
-                aux:= mulmod(aux, aux, q)
                 
                 aux:= mulmod(aux, aux, q)
                 
@@ -362,30 +340,9 @@ contract Verifier {
                     )
                 )
                 
-                w := mulmod(w, w1, q)
                 
                 
-                mstore(
-                    add(pMem, pEval_l2), 
-                    mulmod(
-                        n, 
-                        mod(
-                            add(
-                                sub(
-                                    mload(add(pMem, pXi)), 
-                                    w
-                                ), 
-                                q
-                            ),
-                            q
-                        ), 
-                        q
-                    )
-                )
-                
-                
-                
-                inverseArray(add(pMem, pZhInv), 3 )
+                inverseArray(add(pMem, pZhInv), 2 )
                 
                 let zh := mload(add(pMem, pZh))
                 w := 1
@@ -396,24 +353,6 @@ contract Verifier {
                     mulmod(
                         mload(add(pMem, pEval_l1 )),
                         zh,
-                        q
-                    )
-                )
-                
-                
-                w := mulmod(w, w1, q)
-                
-                
-                
-                mstore(
-                    add(pMem, pEval_l2), 
-                    mulmod(
-                        w,
-                        mulmod(
-                            mload(add(pMem, pEval_l2)),
-                            zh,
-                            q
-                        ),
                         q
                     )
                 )
@@ -435,21 +374,6 @@ contract Verifier {
                             mulmod(
                                 mload(add(pMem, pEval_l1)),
                                 calldataload(add(pPub, 0)),
-                                q
-                            )
-                        ),
-                        q
-                    ),
-                    q
-                )
-                 
-                pl := mod(
-                    add(
-                        sub(
-                            pl,  
-                            mulmod(
-                                mload(add(pMem, pEval_l2)),
-                                calldataload(add(pPub, 32)),
                                 q
                             )
                         ),

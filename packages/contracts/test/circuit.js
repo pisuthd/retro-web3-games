@@ -4,6 +4,8 @@ const path = require("path")
 
 const { dummyMineField, hashItems, preImage, initBlankField } = require("./Helpers")
 
+const SEED = 1234
+
 describe('#circuits', () => {
 
     let circuit
@@ -14,7 +16,7 @@ describe('#circuits', () => {
 
     it("should reveal all cells /w no bomb success", async () => {
         const solution = dummyMineField()
-        const commitment = await hashItems(solution)
+        // const commitment = await hashItems(solution)
     
         let solved = initBlankField(16,16)
 
@@ -32,19 +34,19 @@ describe('#circuits', () => {
                 position: pos,
                 solved,
                 solution,
-                commitment,
-                solutionAtPosition : solution[pos]
+                solutionAtPosition : solution[pos],
+                seed : SEED
             }
 
             const witness = await circuit.calculateWitness(input)
-            await circuit.assertOut(witness, { out: "0" })
+            await circuit.assertOut(witness, { out: `${SEED+pos}` })
         }
     })
 
     it("should reveal cells /w bomb success", async () => {
         const solution = dummyMineField()
-        const commitment = await hashItems(solution)
-    
+        // const commitment = await hashItems(solution)
+
         let solved = initBlankField(16,16)
 
         // find pos. with bombs
@@ -61,12 +63,12 @@ describe('#circuits', () => {
                 position: pos,
                 solved,
                 solution,
-                commitment,
-                solutionAtPosition : solution[pos]
+                solutionAtPosition : solution[pos],
+                seed : SEED
             }
 
             const witness = await circuit.calculateWitness(input)
-            await circuit.assertOut(witness, { out: "1" })
+            await circuit.assertOut(witness, { out: `${SEED+pos+1}` })
         }
 
     })
