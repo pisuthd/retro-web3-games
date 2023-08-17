@@ -43,7 +43,7 @@ const Provider = ({ children }) => {
     const { corrected } = useContext(AccountContext)
 
     useEffect(() => {
-        corrected && loadCurrentGame()
+        // corrected && loadCurrentGame()
     }, [corrected])
 
     const loadCurrentGame = useCallback(async (currentId) => {

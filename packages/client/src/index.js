@@ -13,11 +13,6 @@ import MinesweeperProvider from './hooks/useMinesweeper';
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
-// const BodyFontSizeOverride = createGlobalStyle`
-//   body{
-//     font-size: 15px
-//   }
-// `;
 
 const BackgroundOverride = createGlobalStyle`
   body {
@@ -41,7 +36,6 @@ root.render(
             <ThemeProvider>
               <GlobalStyle />
               <BackgroundOverride/>
-              {/* <BodyFontSizeOverride /> */}
               <App />
             </ThemeProvider>
           </ModalProvider>

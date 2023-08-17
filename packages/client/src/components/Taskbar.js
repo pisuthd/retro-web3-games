@@ -1,81 +1,174 @@
-import React, { useContext } from 'react'
-import { TaskBar, List } from '@react95/core'
+import React, { useContext, forwardRef, createContext } from 'react'
+import { TaskBar, List, Frame, ModalContext as ModalContextSDK, Tooltip } from '@react95/core'
 import styled from 'styled-components'
 import { ModalContext } from '../hooks/useModal';
-import { ReaderClosed, WindowsExplorer, Progman39, Winmine1, Progman36, Dialer1, InfoBubble, Dialmon200, Computer3, FolderExe2 } from '@react95/icons';
+import { Logo, ReaderClosed, WindowsExplorer, Progman39, Winmine1, Progman36, Dialer1, InfoBubble, Dialmon200, Computer3, FolderExe2 } from '@react95/icons';
 import { AccountContext } from '../hooks/useAccount';
 import { useWeb3React } from '@web3-react/core';
+import WindowButton from './WindowButton';
+import { shortAddress } from "../helpers"
 
-const Link = styled.a`
+const Truncate = styled.span`
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-align: left;
+`;
 
-`
+const StyledTooltip = styled(Tooltip)`
+  div:first-child {
+    right: 0;
+  }
+`;
 
-const Taskbar = () => {
+const Taskbar = forwardRef(({ list }, ref) => {
+
+    const [showList, toggleShowList] = React.useState(false);
+    const [activeStart, toggleActiveStart] = React.useState(false);
+    const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
+    const { windows, activeWindow, setActiveWindow } = React.useContext(ModalContextSDK);
 
     const { account } = useWeb3React()
-
     const { disconnect, corrected } = useContext(AccountContext)
 
-    const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
-
     return (
-        <TaskBar
-            list={
-                <List>
-                    {/* <List.Item
-                        icon={<Progman36 variant="32x32_4" />}
-                        onClick={() => {
-                            toggleFirst(true);
-                        }}
-                    >
-                        Deposit OAS
-                    </List.Item> */}
-                    <List.Item icon={<FolderExe2 variant="32x32_4" />}>
-                        <List>
+        <Frame
+            position="fixed"
+            bottom={0}
+            left={0}
+            right={0}
+            display="flex"
+            justifyContent="space-between"
+            h={28}
+            w="100%"
+            padding={2}
+            zIndex="taskbar"
+            ref={ref}
+        >
+            {showList && (
+                <Frame
+                    position="absolute"
+                    bottom="28"
+                    onClick={() => {
+                        toggleActiveStart(false);
+                        toggleShowList(false);
+                    }}
+                >
+                    <List>
+                        {corrected && (
+                            <List.Item icon={<FolderExe2 variant="32x32_4" />}>
+                                <List>
+                                    <List.Item
+                                        icon={<Winmine1 variant="16x16_4" />}
+                                        onClick={() => {
+                                            if (account && corrected) {
+                                                showMinesweeperModal()
+                                            } else {
+                                                alert("Connect wallet first!")
+                                            }
+                                        }}
+                                    >
+                                        Minesweeper
+                                    </List.Item>
+                                </List>
+                                Programs
+                            </List.Item>
+                        )
+
+                        }
+                        {!corrected && (
                             <List.Item
-                                icon={<Winmine1 variant="16x16_4" />}
+                                icon={<Dialmon200 variant="32x32_4" />}
                                 onClick={() => {
-                                    if (account && corrected) {
-                                        showMinesweeperModal()
-                                    } else {
-                                        alert("Connect wallet first!")
-                                    }
+                                    !account && showSignInModal();
                                 }}
                             >
-                                Minesweeper
+                                Connect Wallet
                             </List.Item>
-                        </List>
-                        Programs
-                    </List.Item>
-                    <List.Item
-                        icon={<Dialmon200 variant="32x32_4" />}
-                        onClick={() => {
-                            !account && showSignInModal();
-                        }}
-                    >
-                        Connect Wallet
-                    </List.Item>
-                    <List.Item
-                        icon={<InfoBubble variant="32x32_4" />}
-                        onClick={() => {
-                            showAboutModal();
-                        }}
-                    >
-                        About
-                    </List.Item>
-                    <List.Divider />
-                    <List.Item
-                        icon={<Computer3 variant="32x32_4" />}
-                        onClick={() => {
-                            disconnect();
-                        }}
-                    >
-                        Shut Down...
-                    </List.Item>
-                </List>
-            }
-        />
+                        )}
+                        <List.Item
+                            icon={<InfoBubble variant="32x32_4" />}
+                            onClick={() => {
+                                showAboutModal();
+                            }}
+                        >
+                            About
+                        </List.Item>
+                        <List.Divider />
+                        <List.Item
+                            icon={<Computer3 variant="32x32_4" />}
+                            onClick={() => {
+                                disconnect();
+                            }}
+                        >
+                            Shut Down...
+                        </List.Item>
+                    </List>
+                </Frame>
+            )}
+            <WindowButton
+                small
+                icon={<img
+                    src={"/start-icon.svg"}
+                    height={32}
+                    width={32}
+                    class="ml-auto mr-auto"
+                />}
+                active={activeStart}
+                onClick={() => {
+                    toggleActiveStart(!activeStart);
+                    toggleShowList(!showList);
+                }}
+            >
+                Start
+            </WindowButton>
+
+            <Frame boxShadow="none" w="100%" paddingLeft={0} ml={2} display="flex">
+                {Object.entries(windows).map(
+                    ([windowId, { icon, title, hasButton }]) =>
+                        hasButton && (
+                            <WindowButton
+                                key={windowId}
+                                icon={icon}
+                                active={windowId === activeWindow}
+                                onClick={() => setActiveWindow(windowId)}
+                                small={false}
+                            >
+                                <Truncate>{title}</Truncate>
+                            </WindowButton>
+                        ),
+                )}
+            </Frame>
+
+            {/* wallet status */}
+            <Frame
+                boxShadow="in"
+                bg="transparent"
+                px={6}
+                py={2}
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <StyledTooltip>
+                    {!account && (
+                        <div>Not Connected</div>
+                    )}
+                    {(account && !corrected) && (
+                        <div>Wrong Network</div>
+                    )}
+                    {(account && corrected) && (
+                        <div style={{ flex: "row", flexDirection: "row" }}>
+                            <div>Connected</div>
+                        </div>
+                    )}
+                </StyledTooltip>
+            </Frame>
+        </Frame>
     )
-}
+})
 
 export default Taskbar

@@ -14,14 +14,14 @@ const Wrapper = styled.div`
   flex-direction: row;
 `
 
-const MenuCol = styled.div`
+const LeftCol = styled.div`
   flex: 1; 
   display: flex;
   flex-direction: column;
   max-width: 100px;
 `
 
-const ContentCol = styled.div`
+const RightCol = styled.div`
   flex: 8; 
   display: flex;
   flex-direction: column;
@@ -65,31 +65,23 @@ const Shortcuts = () => {
 
   return (
     <Wrapper>
-      <MenuCol>
-        <IconContainer
-          onClick={() => !account && showSignInModal()}
-        >
-          <Dialmon200
-            title={"Connect Web3 Wallet"}
-            variant="32x32_4"
-            className='pointer'
+      <LeftCol>
+        {!corrected && (
+          <IconContainer
+            onClick={() => !account && showSignInModal()}
+          >
+            <Dialmon200
+              title={"Connect Web3 Wallet"}
+              variant="32x32_4"
+              className='pointer'
 
-          />
-          Connect
-          <br />
-          Wallet
-        </IconContainer>
-        {/* <IconContainer>
-          <Progman36
-            title={"Deposit OAS tokens"}
-            variant="32x32_4"
-            className='pointer'
-            onClick={() => alert("hello")}
-          />
-          Deposit
-          <br />
-          OAS
-        </IconContainer> */}
+            />
+            Connect
+            <br />
+            Wallet
+          </IconContainer>
+        ) }
+
         <IconContainer
           onClick={() => {
             if (account && corrected) {
@@ -118,33 +110,25 @@ const Shortcuts = () => {
           <br />
           .Games
         </IconContainer>
-      </MenuCol>
+      </LeftCol>
+      <RightCol>
+        <div style={{ marginLeft: "auto" }}>
+          {/* <IconContainer
+            onClick={() => !account && showSignInModal()}
+          >
+            <Dialmon200
+              title={"Connect Web3 Wallet"}
+              variant="32x32_4"
+              className='pointer'
 
-      <ContentCol>
-        <Frame w={300} padding={4} style={{ marginLeft: "auto" }}>
-          <Frame padding={10} h="100%" boxShadow="in">
+            />
+            Connect
+            <br />
+            Wallet
+          </IconContainer> */}
+        </div>
 
-            {!account && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>Not Connected</div>
-              </div>
-            )}
-
-            {(account && !corrected) && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>Please switch to Oasys SAND Verse (Id: 20197 )</div>
-              </div>
-            )}
-
-            {(account && corrected) && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>{shortAddress(account)}</div>
-              </div>
-            )}
-
-          </Frame>
-        </Frame>
-      </ContentCol>
+      </RightCol>
 
     </Wrapper>
   )
