@@ -46,6 +46,30 @@ const Provider = ({ children }) => {
         dispatch({ modals: modals.concat([MODAL.SIGN_IN]) })
     }, [modals])
 
+    const showInventoryModal = useCallback(() => {
+        alert("showInventoryModal")
+    }, [modals])
+
+    const closeInventoryModal = useCallback(() => {
+
+    }, [modals])
+
+    const showMarketplaceModal = useCallback(() => {
+        alert("showMarketplaceModal")
+    }, [modals])
+
+    const closeMarketplaceModal = useCallback(() => {
+
+    }, [modals])
+
+    const showChatModal = useCallback(() => {
+        alert("showChatModal")
+    }, [modals])
+
+    const closeChatModal = useCallback(() => {
+
+    }, [modals])
+
     const modalContext = useMemo(
         () => ({
             modals,
@@ -54,7 +78,13 @@ const Provider = ({ children }) => {
             closeSignInModal,
             showSignInModal,
             showMinesweeperModal,
-            closeMinesweeperModal
+            closeMinesweeperModal,
+            showInventoryModal,
+            closeInventoryModal,
+            showChatModal,
+            closeChatModal,
+            showMarketplaceModal,
+            closeMarketplaceModal
         }),
         [modals]
     )

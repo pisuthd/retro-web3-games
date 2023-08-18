@@ -2,7 +2,7 @@ import React, { useContext, forwardRef, createContext } from 'react'
 import { TaskBar, List, Frame, ModalContext as ModalContextSDK, Tooltip } from '@react95/core'
 import styled from 'styled-components'
 import { ModalContext } from '../hooks/useModal';
-import { Logo, ReaderClosed, WindowsExplorer, Progman39, Winmine1, Progman36, Dialer1, InfoBubble, Dialmon200, Computer3, FolderExe2 } from '@react95/icons';
+import {  Access219, Progman24, Sol1, Progman11, Logo, ReaderClosed, WindowsExplorer, Progman39, Winmine1, Progman36, Dialer1, InfoBubble, Dialmon200, Computer3, FolderExe2 } from '@react95/icons';
 import { AccountContext } from '../hooks/useAccount';
 import { useWeb3React } from '@web3-react/core';
 import WindowButton from './WindowButton';
@@ -56,9 +56,34 @@ const Taskbar = forwardRef(({ list }, ref) => {
                     }}
                 >
                     <List>
+                    {corrected && (
+                            <List.Item
+                                icon={<Progman24
+                                    title={"My Inventory"}
+                                    variant="32x32_4"
+                                    className='pointer'
+
+                                />}
+                                onClick={() => {
+                                    !account && showSignInModal();
+                                }}
+                            >
+                                My Inventory
+                            </List.Item>
+                        )}
                         {corrected && (
                             <List.Item icon={<FolderExe2 variant="32x32_4" />}>
                                 <List>
+                                    <List.Item
+                                        icon={<img
+                                            src={"/icons/poker-2.png"}
+                                            height={16}
+                                            width={16}
+                                        />}
+                                        onClick={() => showMinesweeperModal()}
+                                    >
+                                        Blackjack
+                                    </List.Item>
                                     <List.Item
                                         icon={<Winmine1 variant="16x16_4" />}
                                         onClick={() => {
@@ -71,6 +96,16 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                     >
                                         Minesweeper
                                     </List.Item>
+                                    {/* <List.Item
+                                        icon={<img
+                                            src={"/icons/marketplace-icon-3.png"}
+                                            height={16}
+                                            width={16} 
+                                          />}
+                                        onClick={() => showMinesweeperModal()}
+                                    >
+                                        NFT Marketplace
+                                    </List.Item> */}
                                 </List>
                                 Programs
                             </List.Item>
@@ -79,7 +114,11 @@ const Taskbar = forwardRef(({ list }, ref) => {
                         }
                         {!corrected && (
                             <List.Item
-                                icon={<Dialmon200 variant="32x32_4" />}
+                                icon={<img
+                                    src={"/icons/metamask-icon.png"}
+                                    height={32}
+                                    width={32}
+                                />}
                                 onClick={() => {
                                     !account && showSignInModal();
                                 }}
@@ -87,6 +126,32 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                 Connect Wallet
                             </List.Item>
                         )}
+                         
+                        
+                          <List.Item
+                            icon={  <img
+                                src={"/icons/talk-icon.png"}
+                                height={32}
+                                width={32} 
+                              />}
+                            onClick={() => {
+                                showAboutModal();
+                            }}
+                        >
+                            Community Chat
+                        </List.Item>
+                        <List.Item
+                            icon={ <Access219 
+                                variant="32x32_4" 
+
+                            />}
+                            onClick={() => {
+                                showAboutModal();
+                            }}
+                        >
+                            Marketplace
+                        </List.Item>
+                      
                         <List.Item
                             icon={<InfoBubble variant="32x32_4" />}
                             onClick={() => {
@@ -123,7 +188,6 @@ const Taskbar = forwardRef(({ list }, ref) => {
             >
                 Start
             </WindowButton>
-
             <Frame boxShadow="none" w="100%" paddingLeft={0} ml={2} display="flex">
                 {Object.entries(windows).map(
                     ([windowId, { icon, title, hasButton }]) =>

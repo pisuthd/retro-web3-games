@@ -2,7 +2,7 @@ import { InjectedConnector } from "@web3-react/injected-connector"
 
 export const injected = new InjectedConnector()
 
-export const SUPPORT_CHAINS = [20197]
+export const SUPPORT_CHAINS = [247253]
 
 export const Connectors = [
     {
