@@ -23,6 +23,11 @@ module.exports = {
       chainId: 20197,
       url: "https://rpc.sandverse.oasys.games",
       accounts: [PRIVATE_KEY],
+    },
+    saakuruTestnet: {
+      chainId: 247253,
+      url: "https://rpc-testnet.saakuru.network",
+      accounts: [PRIVATE_KEY]
     }
   }
 };
