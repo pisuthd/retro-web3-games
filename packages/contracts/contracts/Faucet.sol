@@ -10,14 +10,13 @@ contract Faucet {
     }
 
     mapping(address => Role) private permissions;
-    mapping(address => bool) public claimed;
 
     uint256 public total;
     uint256 public amount; // amount to be giveaway
 
     constructor() {
         permissions[msg.sender] = Role.ADMIN;
-        amount = 0.5 ether; // 0.5 OAS
+        amount = 0.1 ether; // 0.1 OAS
     }
 
     function deposit() external payable {
@@ -25,13 +24,10 @@ contract Faucet {
         total += msg.value;
     }
 
-    function withdraw() external {
+    function withdraw(address _address) external {
         require(total >= amount, "Insufficient OAS");
-        require( claimed[msg.sender] == false, "Already claimed");
-        
-        claimed[msg.sender] = true;
 
-        (bool success, ) = msg.sender.call{value: amount}("");
+        (bool success, ) = _address.call{value: amount}("");
         require(success, "Failed to send Ether");
 
         total -= amount;
