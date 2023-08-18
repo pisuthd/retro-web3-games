@@ -10,7 +10,7 @@ contract Faucet {
     }
 
     mapping(address => Role) private permissions;
-    mapping(address => uint) public latest;
+    mapping(address => bool) public claimed;
 
     uint256 public total;
     uint256 public amount; // amount to be giveaway
@@ -27,9 +27,9 @@ contract Faucet {
 
     function withdraw() external {
         require(total >= amount, "Insufficient OAS");
-        require(((latest[msg.sender] + 12 hours) >= block.timestamp),"Today quota is reached");
-
-        latest[msg.sender] = block.timestamp;
+        require( claimed[msg.sender] == false, "Already claimed");
+        
+        claimed[msg.sender] = true;
 
         (bool success, ) = msg.sender.call{value: amount}("");
         require(success, "Failed to send Ether");
