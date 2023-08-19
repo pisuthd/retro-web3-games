@@ -18,6 +18,7 @@
     "snarkjs": "^0.7.0"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
     "bigint-conversion": "^2.4.1",
     "circom_tester": "^0.0.19",
     "circomlibjs": "^0.1.7",
