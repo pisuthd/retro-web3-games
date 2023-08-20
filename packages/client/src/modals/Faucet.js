@@ -61,7 +61,7 @@ const Faucet = ({
             closeModal={closeModal}
             buttons={[{ value: "Send Me OAS", onClick: onClaim }, { value: "Close", onClick: closeModal }]}
             defaultPosition={{
-                x: 500,
+                x: 450,
                 y: 40,
             }}
         >

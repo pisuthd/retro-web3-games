@@ -9,7 +9,8 @@ export const MODAL = {
     SIGN_IN: "SIGN_IN",
     MINESWEEPER: "MINESWEEPER",
     FAUCET: "FAUCET",
-    INVENTORY: "INVENTORY"
+    INVENTORY: "INVENTORY",
+    MARKETPLACE : "MARKETPLACE"
 }
 
 const Provider = ({ children }) => {
@@ -57,11 +58,11 @@ const Provider = ({ children }) => {
     }, [modals])
 
     const showMarketplaceModal = useCallback(() => {
-        alert("showMarketplaceModal")
+        dispatch({ modals: modals.concat([MODAL.MARKETPLACE]) })
     }, [modals])
 
     const closeMarketplaceModal = useCallback(() => {
-
+        dispatch({ modals: modals.filter(item => item !== MODAL.MARKETPLACE) })
     }, [modals])
 
     const showChatModal = useCallback(() => {

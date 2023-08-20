@@ -68,6 +68,12 @@ const Inventory = ({
 
             }
 
+            {!loading && collections.length === 0 && (
+                <div style={{ textAlign: "center", padding: "20px", paddingBottom: "0px", fontSize: "16px", fontStyle: "italic" }}>
+                    None
+                </div>
+            )}
+
             <Panel>
                 {!loading && collections.map((item, index) => {
                     return (
@@ -118,10 +124,10 @@ const Item = ({ item, delay }) => {
             <h3 style={{ marginLeft: "auto", marginRight: "auto", padding: "0px", margin: "0px", textAlign: "center" }}>
                 {info && info.name ? info.name : "UNNAMED"}
             </h3>
-            <div style={{textAlign: "center" , fontSize: "11px", fontStyle : "italic"}}>
+            <div style={{ textAlign: "center", fontSize: "11px", fontStyle: "italic" }}>
                 {info && info.application ? info.application : "UNNAMED"}
             </div>
-            <div style={{textAlign: "center" , fontSize: "11px" }}>
+            <div style={{ textAlign: "center", fontSize: "11px" }}>
                 {item && item.tokenType === "ERC1155" ? `Amount: ${Number(item.value).toLocaleString()}` : "ERC-721"}
             </div>
         </Frame>

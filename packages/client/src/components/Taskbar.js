@@ -26,7 +26,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
 
     const [showList, toggleShowList] = React.useState(false);
     const [activeStart, toggleActiveStart] = React.useState(false);
-    const { showAboutModal, showSignInModal, showMinesweeperModal, showInventoryModal } = useContext(ModalContext)
+    const { showAboutModal, showSignInModal, showMinesweeperModal, showInventoryModal, showMarketplaceModal } = useContext(ModalContext)
     const { windows, activeWindow, setActiveWindow } = React.useContext(ModalContextSDK);
 
     const { account } = useWeb3React()
@@ -56,19 +56,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                     }}
                 >
                     <List>
-                    {corrected && (
-                            <List.Item
-                                icon={<Progman24
-                                    title={"My Inventory"}
-                                    variant="32x32_4"
-                                    className='pointer'
-
-                                />}
-                                onClick={() => showInventoryModal()}
-                            >
-                                My Inventory
-                            </List.Item>
-                        )}
+                    
                         {corrected && (
                             <List.Item icon={<FolderExe2 variant="32x32_4" />}>
                                 <List>
@@ -110,6 +98,19 @@ const Taskbar = forwardRef(({ list }, ref) => {
                         )
 
                         }
+                        {corrected && (
+                            <List.Item
+                                icon={<Progman24
+                                    title={"My Inventory"}
+                                    variant="32x32_4"
+                                    className='pointer'
+
+                                />}
+                                onClick={() => showInventoryModal()}
+                            >
+                                My Inventory
+                            </List.Item>
+                        )}
                         {!corrected && (
                             <List.Item
                                 icon={<img
@@ -143,9 +144,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                 variant="32x32_4" 
 
                             />}
-                            onClick={() => {
-                                showAboutModal();
-                            }}
+                            onClick={() => showMarketplaceModal()}
                         >
                             Marketplace
                         </List.Item>

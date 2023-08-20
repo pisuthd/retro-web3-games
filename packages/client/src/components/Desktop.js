@@ -7,10 +7,11 @@ import SignIn from "../modals/SignIn"
 import Minesweeper from "../modals/Minesweeper"
 import Faucet from "../modals/Faucet"
 import Inventory from "../modals/Inventory"
+import Marketplace from "../modals/Marketplace"
 
 const Desktop = () => {
 
-    const  { modals, closeAboutModal, closeSignInModal, closeMinesweeperModal, closeFaucetModal, closeInventoryModal } = useContext(ModalContext)
+    const  { modals, closeAboutModal, closeSignInModal, closeMinesweeperModal, closeFaucetModal, closeInventoryModal, closeMarketplaceModal } = useContext(ModalContext)
  
     return (
         <div>
@@ -20,6 +21,7 @@ const Desktop = () => {
             { modals.find(item => item === MODAL.FAUCET) && <Faucet closeModal={closeFaucetModal}/>} 
             { modals.find(item => item === MODAL.INVENTORY) && <Inventory closeModal={closeInventoryModal}/>} 
             { modals.find(item => item === MODAL.MINESWEEPER) && <Minesweeper closeModal={closeMinesweeperModal}/>} 
+            { modals.find(item => item === MODAL.MARKETPLACE) && <Marketplace closeModal={closeMarketplaceModal}/>} 
         </div>
     )
 }

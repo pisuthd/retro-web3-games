@@ -3,7 +3,7 @@ import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
 import axios from "axios"
 import { AccountContext } from "./useAccount"
-import { ERC1155_COLLECTIONS, ERC721_COLLECTIONS, rpcUrl } from "../constants";
+import { ERC1155_COLLECTIONS, ERC721_COLLECTIONS, rpcUrl, gameItemAddress } from "../constants";
 import { isAddressesEqual } from "../helpers"
 import GameItemABI from "../abi/GameItem.json"
 
@@ -34,6 +34,22 @@ const Provider = ({ children }) => {
         corrected && loadAllCollection()
     }, [corrected, tick])
 
+    const increaseTick = useCallback(() => {
+        dispatch({ tick: tick + 1 })
+    }, [tick])
+
+    const mint = useCallback(async (tokenId, amount, value) => {
+        const contract = new ethers.Contract(gameItemAddress, GameItemABI, library.getSigner());
+        return await contract.mint(account, tokenId, amount, { value: ethers.utils.parseEther(`${value}`) })
+    }, [account, library])
+
+    const sellAll = useCallback(async (tokenId) => {
+
+        const contract = new ethers.Contract(gameItemAddress, GameItemABI, library.getSigner());
+        const bal = await contract.balanceOf(account, tokenId)
+        return await contract.buyback(account, tokenId, bal)
+    }, [account, library])
+
     const getInfo = useCallback(async (tokenType, address, tokenId) => {
 
         const contract = new ethers.Contract(address, GameItemABI, library.getSigner());
@@ -59,7 +75,7 @@ const Provider = ({ children }) => {
             const { data } = await axios.get(`${uri}`)
             json = data
         }
-        
+
         // override IPFS for images
         if (json && json.image && json.image.includes("ipfs://")) {
             const gateway = gatewayList[Math.floor(Math.random() * gatewayList.length)]
@@ -157,6 +173,8 @@ const Provider = ({ children }) => {
 
             const owned = {}
 
+            let txs = []
+
             for (const log of logs) {
                 if (log.args) {
                     const { from, to, id, value } = log.args
@@ -170,8 +188,12 @@ const Provider = ({ children }) => {
                         if (!owned[Number(id)]) {
                             owned[Number(id)] = 0
                         }
-                        owned[Number(id)] -= Number(value)
+                        if (!txs.includes(log.transactionHash)) {
+                            owned[Number(id)] -= Number(value)
+                        } 
                     }
+
+                    txs.push(log.transactionHash)
                 }
             }
 
@@ -195,9 +217,12 @@ const Provider = ({ children }) => {
         () => ({
             collections,
             loading,
-            getInfo
+            getInfo,
+            mint,
+            sellAll,
+            increaseTick
         }),
-        [collections, loading, getInfo]
+        [collections, loading, getInfo, mint, sellAll, increaseTick]
     )
 
     return (
