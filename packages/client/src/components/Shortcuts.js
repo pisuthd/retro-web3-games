@@ -63,7 +63,8 @@ const Shortcuts = () => {
     showMinesweeperModal,
     showMarketplaceModal,
     showChatModal,
-    showInventoryModal
+    showInventoryModal,
+    showFaucetModal
   } = useContext(ModalContext)
 
   // useEffect(() => {
@@ -148,13 +149,7 @@ const Shortcuts = () => {
           Marketplace
         </IconContainer>
         <IconContainer
-          onClick={() => {
-            if (account && corrected) {
-              showMarketplaceModal()
-            } else {
-              alert("Connect wallet first!")
-            }
-          }}
+          onClick={() => showFaucetModal()}
         >
           <Progman42
             title={"Testnet Faucet"}

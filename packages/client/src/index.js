@@ -10,6 +10,7 @@ import { ThemeProvider, GlobalStyle } from '@react95/core';
 import ModalProvider from "./hooks/useModal"
 import AccountProvider from "./hooks/useAccount"
 import MinesweeperProvider from './hooks/useMinesweeper';
+import InventoryProvider from "./hooks/useInventory"
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
@@ -32,13 +33,15 @@ root.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <AccountProvider>
         <MinesweeperProvider>
-          <ModalProvider>
-            <ThemeProvider>
-              <GlobalStyle />
-              <BackgroundOverride/>
-              <App />
-            </ThemeProvider>
-          </ModalProvider>
+          <InventoryProvider>
+            <ModalProvider>
+              <ThemeProvider>
+                <GlobalStyle />
+                <BackgroundOverride />
+                <App />
+              </ThemeProvider>
+            </ModalProvider>
+          </InventoryProvider>
         </MinesweeperProvider>
       </AccountProvider>
     </Web3ReactProvider>

@@ -45,7 +45,7 @@ const Provider = ({ children }) => {
 
     const getBalance = useCallback(async () => {
         const balance = await library.getBalance(account)
-        return ethers.utils.formatEther(balance)
+        return `${(Number(ethers.utils.formatEther(balance)).toLocaleString())}`
     }, [account, library])
 
     const accountContext = useMemo(

@@ -7,7 +7,9 @@ export const ModalContext = createContext()
 export const MODAL = {
     ABOUT: "ABOUT",
     SIGN_IN: "SIGN_IN",
-    MINESWEEPER: "MINESWEEPER"
+    MINESWEEPER: "MINESWEEPER",
+    FAUCET: "FAUCET",
+    INVENTORY: "INVENTORY"
 }
 
 const Provider = ({ children }) => {
@@ -47,11 +49,11 @@ const Provider = ({ children }) => {
     }, [modals])
 
     const showInventoryModal = useCallback(() => {
-        alert("showInventoryModal")
+        dispatch({ modals: modals.concat([MODAL.INVENTORY]) })
     }, [modals])
 
     const closeInventoryModal = useCallback(() => {
-
+        dispatch({ modals: modals.filter(item => item !== MODAL.INVENTORY) })
     }, [modals])
 
     const showMarketplaceModal = useCallback(() => {
@@ -70,6 +72,14 @@ const Provider = ({ children }) => {
 
     }, [modals])
 
+    const showFaucetModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.FAUCET]) })
+    }, [modals])
+
+    const closeFaucetModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.FAUCET) })
+    }, [modals])
+
     const modalContext = useMemo(
         () => ({
             modals,
@@ -84,7 +94,9 @@ const Provider = ({ children }) => {
             showChatModal,
             closeChatModal,
             showMarketplaceModal,
-            closeMarketplaceModal
+            closeMarketplaceModal,
+            showFaucetModal,
+            closeFaucetModal
         }),
         [modals]
     )

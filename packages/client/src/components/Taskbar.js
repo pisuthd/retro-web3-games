@@ -26,7 +26,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
 
     const [showList, toggleShowList] = React.useState(false);
     const [activeStart, toggleActiveStart] = React.useState(false);
-    const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
+    const { showAboutModal, showSignInModal, showMinesweeperModal, showInventoryModal } = useContext(ModalContext)
     const { windows, activeWindow, setActiveWindow } = React.useContext(ModalContextSDK);
 
     const { account } = useWeb3React()
@@ -64,9 +64,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                     className='pointer'
 
                                 />}
-                                onClick={() => {
-                                    !account && showSignInModal();
-                                }}
+                                onClick={() => showInventoryModal()}
                             >
                                 My Inventory
                             </List.Item>
