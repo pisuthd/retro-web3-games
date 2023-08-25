@@ -14,10 +14,17 @@ import InventoryProvider from "./hooks/useInventory"
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
+const getRandomWallpaper = () => {
+  const allWallpapers = ["wallpaper-1.png", "wallpaper-2.png"]
+  const item = allWallpapers[Math.floor(Math.random() * allWallpapers.length)];
+  return item
+}
 
 const BackgroundOverride = createGlobalStyle`
   body {
-    background-image: url("wallpaper.png");
+    ${props => props.wallpaper && `background-image: url("${props.wallpaper}");`} 
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 `
 
@@ -37,7 +44,7 @@ root.render(
             <ModalProvider>
               <ThemeProvider>
                 <GlobalStyle />
-                <BackgroundOverride />
+                <BackgroundOverride wallpaper={getRandomWallpaper()} />
                 <App />
               </ThemeProvider>
             </ModalProvider>
