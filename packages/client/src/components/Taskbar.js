@@ -66,7 +66,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                             height={16}
                                             width={16}
                                         />}
-                                        onClick={() => showMinesweeperModal()}
+                                        onClick={() => alert("Coming Soon")}
                                     >
                                         Blackjack
                                     </List.Item>
@@ -127,7 +127,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                         )}
                          
                         
-                          <List.Item
+                        {/* <List.Item
                             icon={  <img
                                 src={"/icons/talk-icon.png"}
                                 height={32}
@@ -138,7 +138,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                             }}
                         >
                             Community Chat
-                        </List.Item>
+                        </List.Item> */}
                         <List.Item
                             icon={ <Access219 
                                 variant="32x32_4" 

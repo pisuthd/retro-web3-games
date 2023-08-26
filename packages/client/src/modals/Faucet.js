@@ -48,6 +48,7 @@ const Faucet = ({
             setTick(tick + 1)
 
         } catch (e) {
+            console.log(e)
             setErrorMessage(parseError(e))
         }
 

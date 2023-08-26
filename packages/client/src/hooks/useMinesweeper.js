@@ -2,11 +2,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer,
 import axios from "axios"
 import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
-// import { buildPoseidon } from "circomlibjs"
-import MinesweeperABI from "../abi/Minesweeper.json"
-import { host, contractAddress } from "../constants";
 
+import { host, minesweeperAddress, websocketUrl, gameItemAddress } from "../constants";
 import { AccountContext } from "./useAccount"
+import MinesweeperABI from "../abi/Minesweeper.json"
+import GameItemABI from "../abi/GameItem.json"
+
+import { tileNumberToVal } from "../helpers"
 
 export const MinesweeperContext = createContext()
 
@@ -17,175 +19,187 @@ const Provider = ({ children }) => {
         {
             loading: true,
             gameId: undefined,
-            commitment: undefined,
+            hash: undefined,
             smileyButton: undefined,
             minesCounter: undefined,
-            state: undefined,
             gameStarted: false,
-            deposit : "0" ,
-            gameEnded: false
+            gameEnded: false,
+            flags: 0
         }
     )
 
-    const {
-        loading,
-        gameId,
-        commitment,
-        smileyButton,
-        minesCounter,
-        gameStarted,
-        gameEnded,
-        deposit,
-        state
-    } = values
+    const { loading, gameId, smileyButton, minesCounter, gameStarted, hash, gameEnded, flags } = values
 
     const { account, library } = useWeb3React()
     const { corrected } = useContext(AccountContext)
 
+    const [state, setState] = useState([]);
+
     useEffect(() => {
-        // corrected && loadCurrentGame()
-    }, [corrected])
+        loadGame()
+    }, [])
 
-    const loadCurrentGame = useCallback(async (currentId) => {
+    useEffect(() => {
+        hash && loadTiles()
+    }, [hash])
 
-        const contract = new ethers.Contract(contractAddress, MinesweeperABI, library.getSigner());
+    useEffect(() => {
 
-        const currentGameId = currentId || await contract.currentGameId()
+        const provider = new ethers.providers.WebSocketProvider(websocketUrl)
+        const contract = new ethers.Contract(minesweeperAddress, MinesweeperABI, provider)
 
-        const result = await contract.games(currentGameId)
+        const onChangeHandler = (gameId, position, cellData, button, fromAddress) => {
+            console.log("Change called");
 
-        const commitment = `${result["solution"]}`
+            const updated = state.map((val, index) => {
+                if (index === Number(position)) {
+                    val = tileNumberToVal(cellData)
+                }
+                return val
+            })
+            setState(updated)
+            dispatch({ smileyButton: Number(button) })
 
-        const { data } = await axios.get(`${host}/state/${commitment}`)
+            if ([5,6].includes(Number(cellData))) {
+                console.log("load tile again")
+                loadTiles()
+            }
+            if ([2].includes(Number(cellData))) { 
+                loadGame()
+            }
 
-        const deposit = await library.getBalance(contractAddress)
+        };
+
+        contract.on("Revealed", onChangeHandler) 
+
+        return () => contract.removeAllListeners()
+    }, [state]);
+
+    const loadGame = useCallback(async () => {
+        console.log("load new game...")
+
+        const provider = new ethers.providers.WebSocketProvider(websocketUrl)
+        const contract = new ethers.Contract(minesweeperAddress, MinesweeperABI, provider);
+
+        const currentGameId = await contract.currentGameId()
+        const result = await contract.getGameState(currentGameId)
+        const flags = await contract.totalFlags()
 
         dispatch({
-            loading: false,
             gameId: Number(currentGameId),
-            commitment,
             smileyButton: Number(result['smileyButton']),
             minesCounter: Number(result['minesCounter']),
             gameStarted: result['gameStarted'],
             gameEnded: result['gameEnded'],
-            state: data.state,
-            deposit : ethers.utils.formatEther(deposit)
+            flags: Number(flags),
+            hash: result['solution']
         })
 
-    }, [library])
+    }, [])
+
+    const loadTiles = useCallback(async () => {
+        const { data } = await axios.get(`${host}/state/${hash}`)
+        const { state } = data
+        setState(state)
+
+    }, [hash])
 
     const revealTile = useCallback(async (coordinates) => {
 
-        console.log("generate proof for coordinates : ", coordinates)
-
-        const position = (coordinates.y * 16) + coordinates.x
-
-        const payload = {
-            commitment,
-            position,
+        if (!corrected) {
+            alert("Wallet is not connected")
+            return
         }
 
-        console.log("position --> ", position)
+        const position = (coordinates.y * 16) + coordinates.x
+        const contract = new ethers.Contract(minesweeperAddress, MinesweeperABI, library.getSigner());
 
-        const { data } = await axios.post(`${host}/proof` , payload)
-        const { proof, publicSignals } = data
+        await contract.press(position)
 
-        console.log("proof --> ", proof, publicSignals)
-
-        const contract = new ethers.Contract(contractAddress, MinesweeperABI, library.getSigner());
-
-        const tx = await contract.reveal(position, proof, publicSignals)
-
-        await tx.wait()
-
-        console.log("tx / commitment ", commitment, tx.hash)
-
-        await axios.post(`${host}/update` , {
-            commitment : `${commitment}`,
-            tx : `${tx.hash}`
+        const updated = state.map((val, index) => {
+            if (index === position) {
+                val = "pressed"
+            }
+            return val
         })
+        setState(updated)
 
-        await loadCurrentGame(gameId)
-
-    }, [commitment, gameId, library])
-
-    const newGame = useCallback(async () => {
-
-        const contract = new ethers.Contract(contractAddress, MinesweeperABI, library.getSigner());
-
-        const { data } = await axios.get(`${host}/new`)
-        const { commitment } = data
-
-        const tx = await contract.create(commitment)
-
-        await tx.wait()
-
-        await loadCurrentGame()
-
-    },[library])
+    }, [corrected, library, state])
 
     const flagTile = useCallback(async (coordinates) => {
 
-        console.log("generate proof for coordinates : ", coordinates)
-
-        const position = (coordinates.y * 16) + coordinates.x
-
-        const payload = {
-            commitment,
-            position,
+        if (!corrected) {
+            alert("Wallet is not connected")
+            return
         }
 
-        const { data } = await axios.post(`${host}/proof` , payload)
-        const { proof, publicSignals } = data
+        // checking approval first
+        const nft = new ethers.Contract(gameItemAddress, GameItemABI, library.getSigner());
 
-        const contract = new ethers.Contract(contractAddress, MinesweeperABI, library.getSigner());
+        const approved = await nft.isApprovedForAll(account, minesweeperAddress)
 
-        const tx = await contract.flag(position, proof, publicSignals, {
-            value : ethers.utils.parseEther("0.01")
+        if (!approved) {
+            const tx = await nft.setApprovalForAll(minesweeperAddress, true)
+            await tx.wait()
+        }
+
+        const contract = new ethers.Contract(minesweeperAddress, MinesweeperABI, library.getSigner());
+
+        const position = (coordinates.y * 16) + coordinates.x
+        await contract.flag(position)
+
+        const updated = state.map((val, index) => {
+            if (index === position) {
+                val = "pressed"
+            }
+            return val
         })
+        setState(updated)
 
-        await tx.wait()
+    }, [account, library, state])
 
-        console.log("tx / commitment ", commitment, tx.hash)
+    const newGame = useCallback(async () => {
+        
+        const signature = await library.getSigner().signMessage("MINESWEEPER")
 
-        await axios.post(`${host}/update` , {
-            commitment : `${commitment}`,
-            tx : `${tx.hash}`,
-            flag : true
-        })
+        const payload = {
+            gameId:  "MINESWEEPER",
+            signature 
+        }
 
-        await loadCurrentGame(gameId)
+        await axios.post(`${host}/new`, payload)
 
-    }, [commitment,  gameId, library])
+        console.log("done and try to load new game")
+
+        loadGame()
+    },[library])
 
     const minesweeperContext = useMemo(
         () => ({
             loading,
             gameId,
             state,
-            commitment,
             smileyButton,
             minesCounter,
             gameStarted,
             gameEnded,
+            flags,
             revealTile,
             flagTile,
-            newGame,
-            deposit
+            newGame
         }),
         [
             loading,
             gameId,
             state,
-            commitment,
             smileyButton,
             minesCounter,
             gameStarted,
             gameEnded,
+            flags,
             revealTile,
             flagTile,
-            newGame,
-            deposit
+            newGame
         ]
     )
 

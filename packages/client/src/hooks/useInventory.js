@@ -3,7 +3,7 @@ import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers";
 import axios from "axios"
 import { AccountContext } from "./useAccount"
-import { ERC1155_COLLECTIONS, ERC721_COLLECTIONS, rpcUrl, gameItemAddress } from "../constants";
+import { ERC1155_COLLECTIONS, ERC721_COLLECTIONS, websocketUrl, gameItemAddress } from "../constants";
 import { isAddressesEqual } from "../helpers"
 import GameItemABI from "../abi/GameItem.json"
 
@@ -97,7 +97,7 @@ const Provider = ({ children }) => {
 
         const holderAddress = account
 
-        const provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+        const provider = new ethers.providers.WebSocketProvider(websocketUrl)
 
         // check ERC721 first
         for (const address of ERC721_COLLECTIONS) {

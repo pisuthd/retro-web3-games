@@ -90,7 +90,7 @@ const Shortcuts = () => {
           </IconContainer>
         )}
 
-        <IconContainer
+        {/* <IconContainer
           onClick={() => {
             if (account && corrected) {
               showChatModal()
@@ -106,10 +106,10 @@ const Shortcuts = () => {
             className="pointer"
           />
           Community<br />Chat
-        </IconContainer>
+        </IconContainer> */}
 
         <IconContainer
-          onClick={() => showMinesweeperModal()}
+          onClick={() => alert("Coming Soon")}
         >
           <img
             src={"/icons/poker-2.png"}
@@ -133,13 +133,7 @@ const Shortcuts = () => {
         </IconContainer>
 
         <IconContainer
-          onClick={() => {
-            if (account && corrected) {
-              showMarketplaceModal()
-            } else {
-              alert("Connect wallet first!")
-            }
-          }}
+          onClick={() => showMarketplaceModal()}
         >
           <Access219
             title={"NFT Marketplace"}
