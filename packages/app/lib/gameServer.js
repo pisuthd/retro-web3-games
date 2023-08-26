@@ -16,6 +16,8 @@ class GameServer extends Database {
 
     contracts
 
+    txs
+
     constructor(args) {
         super()
 
@@ -23,6 +25,7 @@ class GameServer extends Database {
         this.signer = args.signer
         this.contracts = args.contracts
 
+        this.txs = []
     }
 
     start = () => {
@@ -32,10 +35,6 @@ class GameServer extends Database {
 
         const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
 
-        // contract.on("GameCreated", (gameId, solution) => {
-        //     console.log("event ", gameId, solution)
-        // });
-
         contract.on("Pressed", (gameId, position, player) => {
             this.revealMinesweeperBoard(gameId, position, player)
         });
@@ -43,6 +42,34 @@ class GameServer extends Database {
         contract.on("Flagged", (gameId, position, player) => {
             this.revealMinesweeperBoard(gameId, position, player, true)
         });
+
+        return contract
+    }
+
+    // use poll in express
+    poll = async (fromBlock = 0) => {
+        
+        const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
+
+        let events = await contract.queryFilter("Pressed", fromBlock)
+
+        for (let event of events) {
+            const { transactionHash , args } = event
+            if (!this.txs.includes(transactionHash)) {
+                this.revealMinesweeperBoard(args[0], args[1], args[2])
+            }
+            this.txs.push(transactionHash) 
+        }
+
+        events = await contract.queryFilter("Flagged", fromBlock)
+
+        for (let event of events) {
+            const { transactionHash , args } = event
+            if (!this.txs.includes(transactionHash)) {
+                this.revealMinesweeperBoard(args[0], args[1], args[2], true)
+            }
+            this.txs.push(transactionHash) 
+        }
 
     }
 
@@ -170,12 +197,16 @@ class GameServer extends Database {
         if (!this.contracts[GAMES.MINESWEEPER]) {
             throw new Error("Contract is not set")
         }
-
-        const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.signer)
-
+        const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
         const hash = await contract.currentGameSolution()
         const activeGame = await this.getActiveGame(hash)
 
+        const { state } = activeGame
+        return state
+    }
+
+    currentMinesweeperStateByHash = async (hash) => {
+        const activeGame = await this.getActiveGame(hash)
         const { state } = activeGame
         return state
     }

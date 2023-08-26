@@ -139,7 +139,7 @@ const revealBoardOnClick = (board, mineField, i, w) => {
 }
 
 const isBlank = (f) => f === Cell.blank;
-const isNumber = (f) => f.startsWith('open')
+const isNumber = (f) => f !== "x"
 const isBomb = (f) => f === "x";
 
 const shuffleArray = (array) => {
