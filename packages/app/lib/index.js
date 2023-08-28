@@ -23,7 +23,8 @@ const lib = new GameServer({
     provider,
     signer: new ethers.Wallet(process.env.PRIVATE_KEY, provider),
     contracts: {
-        "MINESWEEPER": process.env.MINESWEEPER_ADDRESS
+        "MINESWEEPER": process.env.MINESWEEPER_ADDRESS,
+        "BLACKJACK" : process.env.BLACKJACK_ADDRESS
     }
 })
 

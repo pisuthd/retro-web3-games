@@ -62,26 +62,43 @@ class GameServer extends Database {
     // use poll in express
     poll = async (fromBlock = 0) => {
 
-        const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
+        if (this.contracts[GAMES.MINESWEEPER]) {
+            const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
 
-        let events = await contract.queryFilter("Pressed", fromBlock)
+            let events = await contract.queryFilter("Pressed", fromBlock)
 
-        for (let event of events) {
-            const { transactionHash, args } = event
-            if (!this.txs.includes(transactionHash)) {
-                this.revealMinesweeperBoard(args[0], args[1], args[2])
+            for (let event of events) {
+                const { transactionHash, args } = event
+                if (!this.txs.includes(transactionHash)) {
+                    this.revealMinesweeperBoard(args[0], args[1], args[2])
+                }
+                this.txs.push(transactionHash)
             }
-            this.txs.push(transactionHash)
+
+            events = await contract.queryFilter("Flagged", fromBlock)
+
+            for (let event of events) {
+                const { transactionHash, args } = event
+                if (!this.txs.includes(transactionHash)) {
+                    this.revealMinesweeperBoard(args[0], args[1], args[2], true)
+                }
+                this.txs.push(transactionHash)
+            }
         }
 
-        events = await contract.queryFilter("Flagged", fromBlock)
+        if (this.contracts[GAMES.BLACKJACK]) {
+            const contract = new ethers.Contract(this.contracts[GAMES.BLACKJACK], BlackjackABI, this.provider)
 
-        for (let event of events) {
-            const { transactionHash, args } = event
-            if (!this.txs.includes(transactionHash)) {
-                this.revealMinesweeperBoard(args[0], args[1], args[2], true)
+            const events = await contract.queryFilter("Dealed", fromBlock)
+
+            for (let event of events) {
+                const { transactionHash, args } = event
+                if (!this.txs.includes(transactionHash)) {
+                    this.createBlackjackGame(args[0], Number(args[1]))
+                }
+                this.txs.push(transactionHash)
             }
-            this.txs.push(transactionHash)
+
         }
 
     }
