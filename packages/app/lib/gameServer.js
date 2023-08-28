@@ -1,13 +1,16 @@
 const { ethers } = require("ethers")
 const { MerkleTree } = require("merkletreejs")
 const keccak256 = require("keccak256")
+const { faker } = require('@faker-js/faker');
 
 const { Database } = require("./db")
 const { GAMES, ACTIVE_GAMES_TABLE } = require("./constants")
 
 const { handleAction, initMineField, initBlankField, Cell, addFlag } = require("./helpers/minesweeper")
+const blackjack = require("./helpers/blackjack")
 const { random, parseCellData } = require("./helpers/utils")
 const MinesweeperABI = require("./abi/Minesweeper.json")
+const BlackjackABI = require("./abi/Blackjack.json")
 
 class GameServer extends Database {
 
@@ -33,42 +36,52 @@ class GameServer extends Database {
             throw new Error("No provider has been set")
         }
 
-        const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
+        if (this.contracts[GAMES.MINESWEEPER]) {
+            const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
 
-        contract.on("Pressed", (gameId, position, player) => {
-            this.revealMinesweeperBoard(gameId, position, player)
-        });
+            contract.on("Pressed", (gameId, position, player) => {
+                this.revealMinesweeperBoard(gameId, position, player)
+            });
 
-        contract.on("Flagged", (gameId, position, player) => {
-            this.revealMinesweeperBoard(gameId, position, player, true)
-        });
+            contract.on("Flagged", (gameId, position, player) => {
+                this.revealMinesweeperBoard(gameId, position, player, true)
+            });
+        }
 
-        return contract
+        if (this.contracts[GAMES.BLACKJACK]) {
+            const contract = new ethers.Contract(this.contracts[GAMES.BLACKJACK], BlackjackABI, this.provider)
+
+            contract.on("Dealed", (account, betSize) => {
+                this.createBlackjackGame(account, betSize)
+            });
+
+        }
+
     }
 
     // use poll in express
     poll = async (fromBlock = 0) => {
-        
+
         const contract = new ethers.Contract(this.contracts[GAMES.MINESWEEPER], MinesweeperABI, this.provider)
 
         let events = await contract.queryFilter("Pressed", fromBlock)
 
         for (let event of events) {
-            const { transactionHash , args } = event
+            const { transactionHash, args } = event
             if (!this.txs.includes(transactionHash)) {
                 this.revealMinesweeperBoard(args[0], args[1], args[2])
             }
-            this.txs.push(transactionHash) 
+            this.txs.push(transactionHash)
         }
 
         events = await contract.queryFilter("Flagged", fromBlock)
 
         for (let event of events) {
-            const { transactionHash , args } = event
+            const { transactionHash, args } = event
             if (!this.txs.includes(transactionHash)) {
                 this.revealMinesweeperBoard(args[0], args[1], args[2], true)
             }
-            this.txs.push(transactionHash) 
+            this.txs.push(transactionHash)
         }
 
     }
@@ -113,6 +126,8 @@ class GameServer extends Database {
         }
 
     }
+
+    // MINESWEEPER
 
     createMinesweeperBoard = async (mines = 20) => {
 
@@ -232,6 +247,106 @@ class GameServer extends Database {
         }
 
     }
+
+    // BLACKJACK
+
+    createBlackjackGame = async (account, betSize) => {
+
+        const initState = blackjack.initialGameState(betSize)
+        const updatedState = blackjack.drawAtStart(initState)
+
+        const preImage = updatedState.deck.concat(updatedState.userCards).concat(updatedState.dealerCards)
+
+        const tree = new MerkleTree(preImage.map(item => ethers.solidityPackedKeccak256(["string", "string"], [item.value, item.suit])), keccak256)
+        const hexRoot = tree.getHexRoot();
+
+        // settles on smart contract
+        const contract = new ethers.Contract(this.contracts[GAMES.BLACKJACK], BlackjackABI, this.signer)
+
+        await contract.initGame(account, hexRoot)
+
+        const db = this.getDb(ACTIVE_GAMES_TABLE)
+
+        const game = await this.getActiveGame(account)
+        if (game) {
+            await db.remove(game)
+        }
+
+        await db.put({
+            _id: `${account}`,
+            message: faker.word.words(5),
+            ...updatedState
+        })
+
+    }
+
+    currentBlackjackState = async (account) => {
+        let activeGame = await this.getActiveGame(account)
+
+        // hide hidden values
+        if (activeGame.state === "userTurn") {
+            activeGame.dealerCards = activeGame.dealerCards.map(item => {
+                if (item.hidden === true) {
+                    item.value = "*"
+                    item.suit = "*"
+                }
+                return item
+            })
+            activeGame.dealerScore = blackjack.calculate(activeGame.dealerCards)
+        }
+
+        delete activeGame.deck;
+        return activeGame
+    }
+
+    // 0 = hit, 1 = stand
+    blackjackAction = async ({ account, signature, actionType = 0 }) => {
+
+        const activeGame = await this.getActiveGame(account)
+        const recoveredAddress = ethers.verifyMessage(activeGame.message, signature)
+
+        if (!(account.toLowerCase() === recoveredAddress.toLowerCase())) {
+            throw new Error("Invalid signature")
+        }
+
+        const updatedGame = actionType === 0 ? blackjack.hit(activeGame) : blackjack.stand(activeGame)
+
+        const db = this.getDb(ACTIVE_GAMES_TABLE)
+        // update 
+        await db.put({
+            _id: activeGame["_id"],
+            _rev: activeGame["_rev"],
+            ...updatedGame
+        })
+
+        if (["bust", "userWin", "dealerWin", "tie"].includes(updatedGame.state)) {
+            // settle on contract
+            const contract = new ethers.Contract(this.contracts[GAMES.BLACKJACK], BlackjackABI, this.signer)
+
+            let resultInt
+
+            switch (updatedGame.state) {
+                case "bust":
+                    resultInt = 4
+                    break
+                case "userWin":
+                    resultInt = 5
+                    break
+                case "dealerWin":
+                    resultInt = 6
+                    break
+                case "tie":
+                    resultInt = 7
+                    break
+                default:
+                    resultInt = 0
+            }
+
+            await contract.closeGame(account, resultInt)
+        }
+
+    }
+
 
 }
 
