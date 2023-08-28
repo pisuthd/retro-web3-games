@@ -1,0 +1,3 @@
+name: retroweb3games
+runtime: nodejs
+description: A minimal AWS TypeScript Pulumi program
