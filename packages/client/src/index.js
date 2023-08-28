@@ -11,6 +11,7 @@ import ModalProvider from "./hooks/useModal"
 import AccountProvider from "./hooks/useAccount"
 import MinesweeperProvider from './hooks/useMinesweeper';
 import InventoryProvider from "./hooks/useInventory"
+import BlackjackProvider from "./hooks/useBlackjack"
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
@@ -40,15 +41,17 @@ root.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <AccountProvider>
         <MinesweeperProvider>
-          <InventoryProvider>
-            <ModalProvider>
-              <ThemeProvider>
-                <GlobalStyle />
-                <BackgroundOverride wallpaper={getRandomWallpaper()} />
-                <App />
-              </ThemeProvider>
-            </ModalProvider>
-          </InventoryProvider>
+          <BlackjackProvider>
+            <InventoryProvider>
+              <ModalProvider>
+                <ThemeProvider>
+                  <GlobalStyle />
+                  <BackgroundOverride wallpaper={getRandomWallpaper()} />
+                  <App />
+                </ThemeProvider>
+              </ModalProvider>
+            </InventoryProvider>
+          </BlackjackProvider>
         </MinesweeperProvider>
       </AccountProvider>
     </Web3ReactProvider>

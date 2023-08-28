@@ -26,7 +26,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
 
     const [showList, toggleShowList] = React.useState(false);
     const [activeStart, toggleActiveStart] = React.useState(false);
-    const { showAboutModal, showSignInModal, showMinesweeperModal, showInventoryModal, showMarketplaceModal } = useContext(ModalContext)
+    const { showBlackjackModal, showAboutModal, showSignInModal, showMinesweeperModal, showInventoryModal, showMarketplaceModal } = useContext(ModalContext)
     const { windows, activeWindow, setActiveWindow } = React.useContext(ModalContextSDK);
 
     const { account } = useWeb3React()
@@ -66,7 +66,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                             height={16}
                                             width={16}
                                         />}
-                                        onClick={() => alert("Coming Soon")}
+                                        onClick={() => showBlackjackModal()}
                                     >
                                         Blackjack
                                     </List.Item>

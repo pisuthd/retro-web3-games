@@ -64,7 +64,8 @@ const Shortcuts = () => {
     showMarketplaceModal,
     showChatModal,
     showInventoryModal,
-    showFaucetModal
+    showFaucetModal,
+    showBlackjackModal
   } = useContext(ModalContext)
 
   // useEffect(() => {
@@ -109,7 +110,7 @@ const Shortcuts = () => {
         </IconContainer> */}
 
         <IconContainer
-          onClick={() => alert("Coming Soon")}
+          onClick={() => showBlackjackModal()}
         >
           <img
             src={"/icons/poker-2.png"}
@@ -145,10 +146,11 @@ const Shortcuts = () => {
         <IconContainer
           onClick={() => showFaucetModal()}
         >
-          <Progman42
-            title={"Testnet Faucet"}
-            variant="32x32_4"
-            className='pointer'
+           <img
+            src={"/icons/pifmgr.dll_14_27.png"}
+            height={32}
+            width={32}
+            className="pointer"
           />
           Testnet<br />Faucet
         </IconContainer>

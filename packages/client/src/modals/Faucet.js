@@ -57,7 +57,12 @@ const Faucet = ({
     return (
         <Modal
             width="300"
-            icon={<Progman42 variant="32x32_4" />}
+            icon={ <img
+                src={"/icons/pifmgr.dll_14_27.png"}
+                height={32}
+                width={32}
+                className="pointer"
+              />}
             title="Testnet Faucet"
             closeModal={closeModal}
             buttons={[{ value: "Send Me OAS", onClick: onClaim }, { value: "Close", onClick: closeModal }]}
