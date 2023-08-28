@@ -84,9 +84,11 @@ The Docker configuration file and AWS ECS cluster deployment script are included
 
 ## Deployment
 
-### Oasys SAND Verse
+### Saakuru Testnet
 
 Contract Name | Contract Address 
 --- | --- 
-Verifier | 0x1a8e1e91C73b9Fc5C19B8b04cF7b174670c6f6B7
-Minesweeper | 0xB2987B64f29E194b6134255bC960Da91183a06B0
+Faucet | 0x13E6B05BD8D45aE843674F929A94Edd32BD5e3d9 
+GameItem | 0xCFFcB7982f9831Ac805a83F61D701Bfd5340c2E6
+Minesweeper | 0x1602E9D94d8370dd0d7b9c1ED2aad701CC60ce7e
+Blackjack | 0x59A89D64B08CA6832F20bfEE4C1CE18EEebC02F4
