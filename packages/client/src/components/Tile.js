@@ -33,6 +33,9 @@ const Tile = ({
 
     switch (tile) {
         case "blank":
+            break
+        case "pressed":
+            className += ` ${styles['question']}`;
             break;
         case "open0":
             className += ` ${styles['empty']}`;
@@ -82,7 +85,7 @@ const Tile = ({
                 className={className}
                 onClick={(e) => gameEnded || handleClick(e, coordinates)}
                 onContextMenu={(e) => {
-                    if (!gameEnded) { 
+                    if (!gameEnded) {
                         e.preventDefault();
                         handleClick(e, coordinates, true)
                     }

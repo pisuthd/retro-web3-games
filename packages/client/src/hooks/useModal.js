@@ -7,7 +7,11 @@ export const ModalContext = createContext()
 export const MODAL = {
     ABOUT: "ABOUT",
     SIGN_IN: "SIGN_IN",
-    MINESWEEPER: "MINESWEEPER"
+    MINESWEEPER: "MINESWEEPER",
+    FAUCET: "FAUCET",
+    INVENTORY: "INVENTORY",
+    MARKETPLACE : "MARKETPLACE",
+    BLACKJACK : "BLACKJACK"
 }
 
 const Provider = ({ children }) => {
@@ -15,7 +19,8 @@ const Provider = ({ children }) => {
     const [values, dispatch] = useReducer(
         (curVal, newVal) => ({ ...curVal, ...newVal }),
         {
-            modals: [MODAL.ABOUT]
+            // modals: [MODAL.ABOUT]
+            modals: []
         }
     )
 
@@ -45,6 +50,46 @@ const Provider = ({ children }) => {
         dispatch({ modals: modals.concat([MODAL.SIGN_IN]) })
     }, [modals])
 
+    const showInventoryModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.INVENTORY]) })
+    }, [modals])
+
+    const closeInventoryModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.INVENTORY) })
+    }, [modals])
+
+    const showMarketplaceModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.MARKETPLACE]) })
+    }, [modals])
+
+    const closeMarketplaceModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.MARKETPLACE) })
+    }, [modals])
+
+    const showChatModal = useCallback(() => {
+        alert("showChatModal")
+    }, [modals])
+
+    const closeChatModal = useCallback(() => {
+
+    }, [modals])
+
+    const showFaucetModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.FAUCET]) })
+    }, [modals])
+
+    const closeFaucetModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.FAUCET) })
+    }, [modals])
+
+    const showBlackjackModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.BLACKJACK]) })
+    }, [modals])
+
+    const closeBlackjackModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.BLACKJACK) })
+    }, [modals])
+
     const modalContext = useMemo(
         () => ({
             modals,
@@ -53,7 +98,17 @@ const Provider = ({ children }) => {
             closeSignInModal,
             showSignInModal,
             showMinesweeperModal,
-            closeMinesweeperModal
+            closeMinesweeperModal,
+            showInventoryModal,
+            closeInventoryModal,
+            showChatModal,
+            closeChatModal,
+            showMarketplaceModal,
+            closeMarketplaceModal,
+            showFaucetModal,
+            closeFaucetModal,
+            showBlackjackModal,
+            closeBlackjackModal
         }),
         [modals]
     )

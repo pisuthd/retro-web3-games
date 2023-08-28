@@ -10,18 +10,22 @@ import { ThemeProvider, GlobalStyle } from '@react95/core';
 import ModalProvider from "./hooks/useModal"
 import AccountProvider from "./hooks/useAccount"
 import MinesweeperProvider from './hooks/useMinesweeper';
+import InventoryProvider from "./hooks/useInventory"
+import BlackjackProvider from "./hooks/useBlackjack"
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
-// const BodyFontSizeOverride = createGlobalStyle`
-//   body{
-//     font-size: 15px
-//   }
-// `;
+const getRandomWallpaper = () => {
+  const allWallpapers = ["wallpaper-1.png", "wallpaper-2.png"]
+  const item = allWallpapers[Math.floor(Math.random() * allWallpapers.length)];
+  return item
+}
 
 const BackgroundOverride = createGlobalStyle`
   body {
-    background-image: url("wallpaper.png");
+    ${props => props.wallpaper && `background-image: url("${props.wallpaper}");`} 
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 `
 
@@ -37,14 +41,17 @@ root.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <AccountProvider>
         <MinesweeperProvider>
-          <ModalProvider>
-            <ThemeProvider>
-              <GlobalStyle />
-              <BackgroundOverride/>
-              {/* <BodyFontSizeOverride /> */}
-              <App />
-            </ThemeProvider>
-          </ModalProvider>
+          <BlackjackProvider>
+            <InventoryProvider>
+              <ModalProvider>
+                <ThemeProvider>
+                  <GlobalStyle />
+                  <BackgroundOverride wallpaper={getRandomWallpaper()} />
+                  <App />
+                </ThemeProvider>
+              </ModalProvider>
+            </InventoryProvider>
+          </BlackjackProvider>
         </MinesweeperProvider>
       </AccountProvider>
     </Web3ReactProvider>

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Icon, List, Frame, Avatar } from '@react95/core'
 import Blockies from 'react-blockies';
-import { WindowsExplorer, Progman39, Dialer1, Winmine1, InfoBubble, Dialmon200, Progman36 } from "@react95/icons"
+import { Sol1, Access219, Progman42, Progman11, Progman24, Ulclient1002, MicrosoftExchange, Progman39, Dialer1, Winmine1, InfoBubble, Dialmon200, Progman36, Msrating109, Textchat2, Write1 } from "@react95/icons"
 import { ModalContext } from '../hooks/useModal'
 import { useWeb3React } from '@web3-react/core'
 import { AccountContext } from '../hooks/useAccount'
@@ -14,14 +14,14 @@ const Wrapper = styled.div`
   flex-direction: row;
 `
 
-const MenuCol = styled.div`
+const LeftCol = styled.div`
   flex: 1; 
   display: flex;
   flex-direction: column;
   max-width: 100px;
 `
 
-const ContentCol = styled.div`
+const RightCol = styled.div`
   flex: 8; 
   display: flex;
   flex-direction: column;
@@ -54,63 +54,111 @@ const Shortcuts = () => {
 
   const { account } = useWeb3React()
 
-  const [totalEth, setTotalEth] = useState()
+  // const [totalEth, setTotalEth] = useState()
 
   const { corrected, getBalance } = useContext(AccountContext)
-  const { showAboutModal, showSignInModal, showMinesweeperModal } = useContext(ModalContext)
+  const {
+    showAboutModal,
+    showSignInModal,
+    showMinesweeperModal,
+    showMarketplaceModal,
+    showChatModal,
+    showInventoryModal,
+    showFaucetModal,
+    showBlackjackModal
+  } = useContext(ModalContext)
 
-  useEffect(() => {
-    account && getBalance().then(setTotalEth)
-  }, [account])
+  // useEffect(() => {
+  //   account && getBalance().then(setTotalEth)
+  // }, [account])
 
   return (
     <Wrapper>
-      <MenuCol>
-        <IconContainer
-          onClick={() => !account && showSignInModal()}
-        >
-          <Dialmon200
-            title={"Connect Web3 Wallet"}
-            variant="32x32_4"
-            className='pointer'
+      <LeftCol>
+        {!corrected && (
+          <IconContainer
+            onClick={() => !account && showSignInModal()}
+          >
+            <img
+              src={"/icons/metamask-icon.png"}
+              height={32}
+              width={32}
+              className="pointer"
+            />
+            Connect
+            <br />
+            Wallet
+          </IconContainer>
+        )}
 
-          />
-          Connect
-          <br />
-          Wallet
-        </IconContainer>
-        {/* <IconContainer>
-          <Progman36
-            title={"Deposit OAS tokens"}
-            variant="32x32_4"
-            className='pointer'
-            onClick={() => alert("hello")}
-          />
-          Deposit
-          <br />
-          OAS
-        </IconContainer> */}
-        <IconContainer
+        {/* <IconContainer
           onClick={() => {
             if (account && corrected) {
-              showMinesweeperModal()
+              showChatModal()
             } else {
               alert("Connect wallet first!")
             }
           }}
         >
-          <Winmine1
-            title={"Play Minesweeper"}
-            variant="32x32_4"
-            className='pointer'
+          <img
+            src={"/icons/talk-icon.png"}
+            height={32}
+            width={32}
+            className="pointer"
+          />
+          Community<br />Chat
+        </IconContainer> */}
+
+        <IconContainer
+          onClick={() => showBlackjackModal()}
+        >
+          <img
+            src={"/icons/poker-2.png"}
+            height={32}
+            width={32}
+            className="pointer"
+          />
+          Blackjack
+        </IconContainer>
+
+        <IconContainer
+          onClick={() => showMinesweeperModal()}
+        >
+          <img
+            src={"/icons/minesweeper-icon.png"}
+            height={32}
+            width={32}
+            className="pointer"
           />
           Minesweeper
         </IconContainer>
 
         <IconContainer
+          onClick={() => showMarketplaceModal()}
+        >
+          <Access219
+            title={"NFT Marketplace"}
+            variant="32x32_4"
+            className='pointer'
+          />
+          Marketplace
+        </IconContainer>
+        <IconContainer
+          onClick={() => showFaucetModal()}
+        >
+           <img
+            src={"/icons/pifmgr.dll_14_27.png"}
+            height={32}
+            width={32}
+            className="pointer"
+          />
+          Testnet<br />Faucet
+        </IconContainer>
+        <IconContainer
           onClick={() => showAboutModal()}
         >
           <InfoBubble
+            title={"About"}
             variant="32x32_4"
             className='pointer'
           />
@@ -118,33 +166,65 @@ const Shortcuts = () => {
           <br />
           .Games
         </IconContainer>
-      </MenuCol>
 
-      <ContentCol>
-        <Frame w={300} padding={4} style={{ marginLeft: "auto" }}>
-          <Frame padding={10} h="100%" boxShadow="in">
+        {corrected && (
+          <>
+            <IconContainer
+              onClick={() => showInventoryModal()}
+            >
+              <Progman24
+                title={"My Inventory"}
+                variant="32x32_4"
+                className='pointer'
 
-            {!account && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>Not Connected</div>
-              </div>
-            )}
+              />
+              My Inventory
+            </IconContainer>
+            {/* <IconContainer
+              onClick={() => !account && showSignInModal()}
+            >
+              <Progman3
+                title={"Transaction History"}
+                variant="32x32_4"
+                className='pointer'
 
-            {(account && !corrected) && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>Please switch to Oasys SAND Verse (Id: 20197 )</div>
-              </div>
-            )}
+              />
+              Transaction<br />
+              History
+            </IconContainer> */}
+          </>
+        )
 
-            {(account && corrected) && (
-              <div style={{ textAlign: "center", padding: "10px", paddingBottom: "5px" }}>
-                <div>{shortAddress(account)}</div>
-              </div>
-            )}
+        }
 
-          </Frame>
-        </Frame>
-      </ContentCol>
+      </LeftCol>
+      {/* <RightCol>
+        <div style={{ margin: "auto", marginRight: "10px", display: "flex", flexDirection: "column" }}>
+          <IconContainer
+            onClick={() => !account && showSignInModal()}
+          >
+            <Person116
+              title={"Connect Web3 Wallet"}
+              style={{ width: "32px", height: "32px" }}
+              className='pointer'
+
+            />
+            My Inventory
+          </IconContainer>
+          <IconContainer
+            onClick={() => !account && showSignInModal()}
+          >
+            <Dialmon200
+              title={"Connect Web3 Wallet"}
+              variant="32x32_4"
+              className='pointer'
+
+            />
+            Transaction<br />
+            History
+          </IconContainer>
+        </div>
+      </RightCol> */}
 
     </Wrapper>
   )

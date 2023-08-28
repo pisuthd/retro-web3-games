@@ -1,0 +1,216 @@
+.card {
+    width: 75px;
+    height: 108px;
+    display: inline-block;
+    background-image: url('../../sprites/blackjack/back.png');
+    background-size: cover;
+    image-rendering: pixelated;
+}
+
+.card.two.clubs {
+    background-image: url('../../sprites/blackjack/2_of_clubs.png');
+}
+
+.card.two.diamonds {
+    background-image: url('../../sprites/blackjack/2_of_diamonds.png');
+}
+
+.card.two.hearts {
+    background-image: url('../../sprites/blackjack/2_of_hearts.png');
+}
+
+.card.two.spades {
+    background-image: url('../../sprites/blackjack/2_of_spades.png');
+}
+
+.card.three.clubs {
+    background-image: url('../../sprites/blackjack/3_of_clubs.png');
+}
+
+.card.three.diamonds {
+    background-image: url('../../sprites/blackjack/3_of_diamonds.png');
+}
+
+.card.three.hearts {
+    background-image: url('../../sprites/blackjack/3_of_hearts.png');
+}
+
+.card.three.spades {
+    background-image: url('../../sprites/blackjack/3_of_spades.png');
+}
+
+.card.four.clubs {
+    background-image: url('../../sprites/blackjack/4_of_clubs.png');
+}
+
+.card.four.diamonds {
+    background-image: url('../../sprites/blackjack/4_of_diamonds.png');
+}
+
+.card.four.hearts {
+    background-image: url('../../sprites/blackjack/4_of_hearts.png');
+}
+
+.card.four.spades {
+    background-image: url('../../sprites/blackjack/4_of_spades.png');
+}
+
+.card.five.clubs {
+    background-image: url('../../sprites/blackjack/5_of_clubs.png');
+}
+
+.card.five.diamonds {
+    background-image: url('../../sprites/blackjack/5_of_diamonds.png');
+}
+
+.card.five.hearts {
+    background-image: url('../../sprites/blackjack/5_of_hearts.png');
+}
+
+.card.five.spades {
+    background-image: url('../../sprites/blackjack/5_of_spades.png');
+}
+
+.card.six.clubs {
+    background-image: url('../../sprites/blackjack/6_of_clubs.png');
+}
+
+.card.six.diamonds {
+    background-image: url('../../sprites/blackjack/6_of_diamonds.png');
+}
+
+.card.six.hearts {
+    background-image: url('../../sprites/blackjack/6_of_hearts.png');
+}
+
+.card.six.spades {
+    background-image: url('../../sprites/blackjack/6_of_spades.png');
+}
+
+.card.seven.clubs {
+    background-image: url('../../sprites/blackjack/7_of_clubs.png');
+}
+
+.card.seven.diamonds {
+    background-image: url('../../sprites/blackjack/7_of_diamonds.png');
+}
+
+.card.seven.hearts {
+    background-image: url('../../sprites/blackjack/7_of_hearts.png');
+}
+
+.card.seven.spades {
+    background-image: url('../../sprites/blackjack/7_of_spades.png');
+}
+
+.card.eight.clubs {
+    background-image: url('../../sprites/blackjack/8_of_clubs.png');
+}
+
+.card.eight.diamonds {
+    background-image: url('../../sprites/blackjack/8_of_diamonds.png');
+}
+
+.card.eight.hearts {
+    background-image: url('../../sprites/blackjack/8_of_hearts.png');
+}
+
+.card.eight.spades {
+    background-image: url('../../sprites/blackjack/8_of_spades.png');
+}
+
+.card.nine.clubs {
+    background-image: url('../../sprites/blackjack/9_of_clubs.png');
+}
+
+.card.nine.diamonds {
+    background-image: url('../../sprites/blackjack/9_of_diamonds.png');
+}
+
+.card.nine.hearts {
+    background-image: url('../../sprites/blackjack/9_of_hearts.png');
+}
+
+.card.nine.spades {
+    background-image: url('../../sprites/blackjack/9_of_spades.png');
+}
+
+.card.ten.clubs {
+    background-image: url('../../sprites/blackjack/10_of_clubs.png');
+}
+
+.card.ten.diamonds {
+    background-image: url('../../sprites/blackjack/10_of_diamonds.png');
+}
+
+.card.ten.hearts {
+    background-image: url('../../sprites/blackjack/10_of_hearts.png');
+}
+
+.card.ten.spades {
+    background-image: url('../../sprites/blackjack/10_of_spades.png');
+}
+
+.card.jack.clubs {
+    background-image: url('../../sprites/blackjack/jack_of_clubs.png');
+}
+
+.card.jack.diamonds {
+    background-image: url('../../sprites/blackjack/jack_of_diamonds.png');
+}
+
+.card.jack.hearts {
+    background-image: url('../../sprites/blackjack/jack_of_hearts.png');
+}
+
+.card.jack.spades {
+    background-image: url('../../sprites/blackjack/jack_of_spades.png');
+}
+
+.card.king.clubs {
+    background-image: url('../../sprites/blackjack/king_of_clubs.png');
+}
+
+.card.king.diamonds {
+    background-image: url('../../sprites/blackjack/king_of_diamonds.png');
+}
+
+.card.king.hearts {
+    background-image: url('../../sprites/blackjack/king_of_hearts.png');
+}
+
+.card.king.spades {
+    background-image: url('../../sprites/blackjack/king_of_spades.png');
+}
+
+.card.queen.clubs {
+    background-image: url('../../sprites/blackjack/queen_of_clubs.png');
+}
+
+.card.queen.diamonds {
+    background-image: url('../../sprites/blackjack/queen_of_diamonds.png');
+}
+
+.card.queen.hearts {
+    background-image: url('../../sprites/blackjack/queen_of_hearts.png');
+}
+
+.card.queen.spades {
+    background-image: url('../../sprites/blackjack/queen_of_spades.png');
+}
+
+.card.ace.clubs {
+    background-image: url('../../sprites/blackjack/ace_of_clubs.png');
+}
+
+.card.ace.diamonds {
+    background-image: url('../../sprites/blackjack/ace_of_diamonds.png');
+}
+
+.card.ace.hearts {
+    background-image: url('../../sprites/blackjack/ace_of_hearts.png');
+}
+
+.card.ace.spades {
+    background-image: url('../../sprites/blackjack/ace_of_spades.png');
+}
