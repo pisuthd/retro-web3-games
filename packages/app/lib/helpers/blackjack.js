@@ -191,6 +191,8 @@ const drawAtStart = (state) => {
     state = drawCard(state, Deal.user);
     state = drawCard(state, Deal.dealer);
 
+    state = calculateAll(state)
+
     state.state = GameState.userTurn
 
     return state

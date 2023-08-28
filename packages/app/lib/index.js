@@ -24,7 +24,7 @@ const lib = new GameServer({
     signer: new ethers.Wallet(process.env.PRIVATE_KEY, provider),
     contracts: {
         "MINESWEEPER": process.env.MINESWEEPER_ADDRESS,
-        "BLACKJACK" : process.env.BLACKJACK_ADDRESS
+        "BLACKJACK": process.env.BLACKJACK_ADDRESS
     }
 })
 
@@ -80,15 +80,11 @@ app.post('/new', async (req, res) => {
         const { body } = req
         const { gameId, signature } = body
 
-        console.log("new...")
-
         await lib.requestGameCreation({
             gameId,
             signature,
             difficulty: 25
         })
-
-        console.log("done...")
 
         return res.status(200).json({ status: "ok", gameId });
     } catch (e) {
@@ -104,9 +100,36 @@ app.get("/state/:hash", async (req, res) => {
         const { params } = req
         const { hash } = params
 
-        const state = await lib.currentMinesweeperStateByHash(hash)
+        let state
+
+        // if not eth address
+        if (!(/^0x[a-fA-F0-9]{40}$/.test(hash))) {
+            state = await lib.currentMinesweeperStateByHash(hash)
+        } else {
+            state = await lib.currentBlackjackState(hash)
+        }
 
         return res.status(200).json({ status: "ok", state });
+    } catch (e) {
+        return res.status(400).json({ status: "error", error: e.reason || e.message });
+    }
+
+})
+
+// action
+app.post("/action", async (req, res) => {
+
+    try {
+        const { body } = req
+        const { account, signature, actionType } = body
+
+        await lib.blackjackAction({
+            account,
+            signature,
+            actionType
+        })
+
+        return res.status(200).json({ status: "ok" });
     } catch (e) {
         return res.status(400).json({ status: "error", error: e.reason || e.message });
     }
