@@ -11,6 +11,9 @@ describe("Minesweeper", () => {
 
     let minesweeper
     let gameItem
+    let alice
+    let bob
+    let charlie
 
     before(async () => {
 

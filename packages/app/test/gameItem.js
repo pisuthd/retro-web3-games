@@ -7,6 +7,7 @@ describe("GameItem NFT", () => {
     let admin
     let alice
     let bob
+    let charlie
 
     before(async () => {
 
