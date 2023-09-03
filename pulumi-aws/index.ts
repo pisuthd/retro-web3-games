@@ -50,11 +50,23 @@ const appService = new awsx.ecs.FargateService("app-svc", {
                 },
                 {
                     "name": "MINESWEEPER_ADDRESS",
-                    "value": "0x1602E9D94d8370dd0d7b9c1ED2aad701CC60ce7e",
+                    "value": "0xe87A1c7cfE6458CAc665d50CDb85c59E97F3b124",
                 },
                 {
                     "name": "BLACKJACK_ADDRESS",
                     "value": "0x59A89D64B08CA6832F20bfEE4C1CE18EEebC02F4",
+                },
+                {
+                    "name": "TOMO_ENDPOINT",
+                    "value": "https://hackathon.aag.ventures/api/tomoone",
+                },
+                {
+                    "name": "TOMO_API_KEY",
+                    "value": "RW3G1-",
+                },
+                {
+                    "name": "TOMO_SITTER_ADDRESS",
+                    "value": "0x1Bb6bDf61077cd3f9e61bfCFc3F12f044637dD1a",
                 }
             ]
         },
