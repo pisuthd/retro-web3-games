@@ -5,7 +5,10 @@ const { ethers } = require("ethers")
 const cron = require("node-cron");
 
 const { GameServer } = require("./gameServer")
+const { Tomo } = require("./tomo")
+
 const MinesweeperABI = require("./abi/Minesweeper.json")
+const TomoSitterABI = require("./abi/TomoSitter.json")
 
 require('dotenv').config()
 
@@ -28,9 +31,31 @@ const lib = new GameServer({
     }
 })
 
+const tomo = new Tomo({
+    endpoint: process.env.TOMO_ENDPOINT,
+    apiKey: process.env.TOMO_API_KEY
+})
+
 cron.schedule("*/5 * * * * *", async function () {
     const currentBlock = await provider.getBlockNumber()
     await lib.poll(currentBlock)
+});
+
+cron.schedule("*/20 * * * *", async function () {
+
+    const contract = new ethers.Contract(process.env.TOMO_SITTER_ADDRESS, TomoSitterABI, provider)
+    const tokenIds = await contract.currentLockedTokens()
+
+    for (let tokenId of tokenIds) {
+        const id = Number(tokenId)
+        try {
+            // add happiness point
+            await tomo.addHappinessPoint(id, 30)
+        } catch (e) {
+
+        }
+    }
+
 });
 
 app.get('/', async (req, res) => {
