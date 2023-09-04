@@ -5,7 +5,7 @@ RetroWeb3.Games is a platform that collects classic/retro games in Web3 utilizin
 The integration of zkSNARK allows us to ensure efficient game generation and execution, combining the scalability of off-chain processing with the trustless nature of on-chain smart contracts.
 
 - [Live URL](https://www.retroweb3.games)
-- [YouTube](https://youtu.be/oA4rEkKX2X8)
+- [YouTube](https://youtu.be/7FRJeW4age0)
 - [Short Presentation](https://rb.gy/3y53x)
 
 ## Game Available
