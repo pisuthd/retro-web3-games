@@ -63,3 +63,40 @@ export const tileNumberToVal = (input) => {
     }
     return val
 }
+
+export const randomGreeting = () => {
+
+    const sentences = [
+        "how's it going?",
+        "ahoy",
+        "how do?",
+        "what's cooking?",
+        "good day",
+        "what's new?",
+        "what's the dilly?",
+        "what's crack-a-lackin'?",
+        "yello",
+        "yo",
+        "greetings",
+        "what's shaking?",
+        "what's cooking?",
+        "hola",
+        "what's the dizzle?",
+        "what's cooking?",
+        "whazzup ?",
+        "what's new?",
+        "how goes it ?",
+        "whazzup ?",
+        "aloha",
+        "what up ?",
+        "what's happening?",
+        "how's it hanging?",
+        "salutations",
+        "how goes it ?",
+        "yo",
+        "what's crackin' ?",
+        "what's poppin' ?"
+    ]
+
+    return sentences[Math.floor(Math.random() * sentences.length)]
+}

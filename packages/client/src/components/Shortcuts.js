@@ -65,7 +65,8 @@ const Shortcuts = () => {
     showChatModal,
     showInventoryModal,
     showFaucetModal,
-    showBlackjackModal
+    showBlackjackModal,
+    showPetSitterModal
   } = useContext(ModalContext)
 
   // useEffect(() => {
@@ -132,7 +133,17 @@ const Shortcuts = () => {
           />
           Minesweeper
         </IconContainer>
-
+        <IconContainer
+          onClick={() => showPetSitterModal()}
+        >
+          <img
+            src={"/pet-sitter-icon.png"}
+            height={32}
+            width={32}
+            className="pointer"
+          />
+          Tomo Playground
+        </IconContainer>
         <IconContainer
           onClick={() => showMarketplaceModal()}
         >

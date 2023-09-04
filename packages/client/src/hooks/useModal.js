@@ -10,8 +10,9 @@ export const MODAL = {
     MINESWEEPER: "MINESWEEPER",
     FAUCET: "FAUCET",
     INVENTORY: "INVENTORY",
-    MARKETPLACE : "MARKETPLACE",
-    BLACKJACK : "BLACKJACK"
+    MARKETPLACE: "MARKETPLACE",
+    BLACKJACK: "BLACKJACK",
+    PET_SITTER: "PET_SITTER"
 }
 
 const Provider = ({ children }) => {
@@ -90,6 +91,14 @@ const Provider = ({ children }) => {
         dispatch({ modals: modals.filter(item => item !== MODAL.BLACKJACK) })
     }, [modals])
 
+    const showPetSitterModal = useCallback(() => {
+        dispatch({ modals: modals.concat([MODAL.PET_SITTER]) })
+    }, [modals])
+
+    const closePetSitterModal = useCallback(() => {
+        dispatch({ modals: modals.filter(item => item !== MODAL.PET_SITTER) })
+    }, [modals])
+
     const modalContext = useMemo(
         () => ({
             modals,
@@ -108,7 +117,9 @@ const Provider = ({ children }) => {
             showFaucetModal,
             closeFaucetModal,
             showBlackjackModal,
-            closeBlackjackModal
+            closeBlackjackModal,
+            showPetSitterModal,
+            closePetSitterModal
         }),
         [modals]
     )

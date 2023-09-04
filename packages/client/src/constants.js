@@ -19,6 +19,7 @@ export const faucetAddress = process.env.REACT_APP_FAUCET_ADDRESS || "0x13E6B05B
 export const gameItemAddress = process.env.REACT_APP_GAME_ITEM_ADDRESS || "0xCFFcB7982f9831Ac805a83F61D701Bfd5340c2E6"
 export const minesweeperAddress = process.env.REACT_APP_MINESWEEPER_ADDRESS || "0xe87A1c7cfE6458CAc665d50CDb85c59E97F3b124"
 export const blackjackAddress = "0x59A89D64B08CA6832F20bfEE4C1CE18EEebC02F4"
+export const tomoSitterAddress = "0x1Bb6bDf61077cd3f9e61bfCFc3F12f044637dD1a"
 
 export const rpcUrl = process.env.REACT_APP_RPC_URL || "https://rpc-testnet.saakuru.network"
 export const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL || "wss://ws-testnet.saakuru.network"

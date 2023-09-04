@@ -60,17 +60,17 @@ const Provider = ({ children }) => {
             setState(updated)
             dispatch({ smileyButton: Number(button) })
 
-            if ([5,6].includes(Number(cellData))) {
+            if ([5, 6].includes(Number(cellData))) {
                 console.log("load tile again")
                 loadTiles()
             }
-            if ([2].includes(Number(cellData))) { 
+            if ([2].includes(Number(cellData))) {
                 loadGame()
             }
 
         };
 
-        contract.on("Revealed", onChangeHandler) 
+        contract.on("Revealed", onChangeHandler)
 
         return () => contract.removeAllListeners()
     }, [state]);
@@ -98,9 +98,14 @@ const Provider = ({ children }) => {
     }, [])
 
     const loadTiles = useCallback(async () => {
-        const { data } = await axios.get(`${host}/state/${hash}`)
-        const { state } = data
-        setState(state)
+
+        try {
+            const { data } = await axios.get(`${host}/state/${hash}`)
+            const { state } = data
+            setState(state)
+        } catch (e) {
+            console.log(e)
+        }
 
     }, [hash])
 
@@ -159,12 +164,12 @@ const Provider = ({ children }) => {
     }, [account, library, state])
 
     const newGame = useCallback(async () => {
-        
+
         const signature = await library.getSigner().signMessage("MINESWEEPER")
 
         const payload = {
-            gameId:  "MINESWEEPER",
-            signature 
+            gameId: "MINESWEEPER",
+            signature
         }
 
         await axios.post(`${host}/new`, payload)
@@ -172,7 +177,7 @@ const Provider = ({ children }) => {
         console.log("done and try to load new game")
 
         loadGame()
-    },[library])
+    }, [library])
 
     const minesweeperContext = useMemo(
         () => ({
@@ -186,7 +191,8 @@ const Provider = ({ children }) => {
             flags,
             revealTile,
             flagTile,
-            newGame
+            newGame,
+            hash
         }),
         [
             loading,
@@ -199,7 +205,8 @@ const Provider = ({ children }) => {
             flags,
             revealTile,
             flagTile,
-            newGame
+            newGame,
+            hash
         ]
     )
 

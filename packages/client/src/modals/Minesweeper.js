@@ -6,6 +6,7 @@ import DigitsDisplay from '../components/DigitsDisplay';
 import Smiley from '../components/Smiley';
 import Tile from "../components/Tile"
 import { MinesweeperContext } from '../hooks/useMinesweeper';
+import { parseError } from '../helpers';
 
 const Minesweeper = ({
     closeModal
@@ -49,7 +50,7 @@ const Minesweeper = ({
                 await revealTile(coordinates)
             }
         } catch (e) {
-            alert(e.reason || e.message)
+            alert(parseError(e))
         }
         setProcessing(false)
     }, [revealTile, flagTile, processing])

@@ -50,9 +50,9 @@ const Provider = ({ children }) => {
         return await contract.buyback(account, tokenId, bal)
     }, [account, library])
 
-    const getInfo = useCallback(async (tokenType, address, tokenId) => {
+    const getInfo = useCallback(async (tokenType, address, tokenId, provider) => {
 
-        const contract = new ethers.Contract(address, GameItemABI, library.getSigner());
+        const contract = new ethers.Contract(address, GameItemABI, provider ? provider : library.getSigner());
 
         let uri = tokenType === "ERC1155" ? (await contract.uri(tokenId)) : (await contract.tokenURI(tokenId))
 
@@ -211,8 +211,6 @@ const Provider = ({ children }) => {
 
     }, [account, library])
 
-
-
     const inventoryContext = useMemo(
         () => ({
             collections,
@@ -259,7 +257,6 @@ const ERC721TransferAbi = [
         type: 'event',
     },
 ]
-
 
 const ERC1155TransferSingleAbi = [
     {

@@ -1,7 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import { Modal, Frame, Avatar, List, ProgressBar, Alert } from '@react95/core'
-import { Winmine1 } from '@react95/icons'
-import styles from "./css/Minesweeper.module.css"
 import styled from 'styled-components'
 
 import Hand from '../components/Hand'

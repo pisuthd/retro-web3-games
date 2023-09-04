@@ -9,10 +9,11 @@ import Faucet from "../modals/Faucet"
 import Inventory from "../modals/Inventory"
 import Marketplace from "../modals/Marketplace"
 import Blackjack from "../modals/Blackjack"
+import PetSitter from "../modals/PetSitter"
 
 const Desktop = () => {
 
-    const { modals, closeAboutModal, closeSignInModal, closeMinesweeperModal, closeFaucetModal, closeInventoryModal, closeMarketplaceModal, closeBlackjackModal } = useContext(ModalContext)
+    const { modals, closeAboutModal, closeSignInModal, closeMinesweeperModal, closeFaucetModal, closeInventoryModal, closeMarketplaceModal, closeBlackjackModal, closePetSitterModal } = useContext(ModalContext)
 
     return (
         <div>
@@ -24,6 +25,7 @@ const Desktop = () => {
             {modals.find(item => item === MODAL.MINESWEEPER) && <Minesweeper closeModal={closeMinesweeperModal} />}
             {modals.find(item => item === MODAL.MARKETPLACE) && <Marketplace closeModal={closeMarketplaceModal} />}
             {modals.find(item => item === MODAL.BLACKJACK) && <Blackjack closeModal={closeBlackjackModal} />}
+            {modals.find(item => item === MODAL.PET_SITTER) && <PetSitter closeModal={closePetSitterModal} />}
         </div>
     )
 }

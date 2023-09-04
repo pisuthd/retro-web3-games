@@ -12,6 +12,7 @@ import AccountProvider from "./hooks/useAccount"
 import MinesweeperProvider from './hooks/useMinesweeper';
 import InventoryProvider from "./hooks/useInventory"
 import BlackjackProvider from "./hooks/useBlackjack"
+import TomoProvider from "./hooks/useTomo"
 import '@react95/icons/icons.css';
 import styled from 'styled-components';
 
@@ -43,13 +44,15 @@ root.render(
         <MinesweeperProvider>
           <BlackjackProvider>
             <InventoryProvider>
-              <ModalProvider>
-                <ThemeProvider>
-                  <GlobalStyle />
-                  <BackgroundOverride wallpaper={getRandomWallpaper()} />
-                  <App />
-                </ThemeProvider>
-              </ModalProvider>
+              <TomoProvider>
+                <ModalProvider>
+                  <ThemeProvider>
+                    <GlobalStyle />
+                    <BackgroundOverride wallpaper={getRandomWallpaper()} />
+                    <App />
+                  </ThemeProvider>
+                </ModalProvider>
+              </TomoProvider>
             </InventoryProvider>
           </BlackjackProvider>
         </MinesweeperProvider>
