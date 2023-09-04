@@ -10,7 +10,7 @@ RetroWeb3.Games is a platform that collects classic/retro games in Web3 utilizin
 
 - Minesweeper - A classic puzzle game where the objective is to uncover cells on a grid without hitting hidden bombs, anyone can flag hidden bombs by deposit Flag NFT and the person who flags the last mine will win the prize pool.
 - Blackjack - A classic card game where the objective is to have a hand value as close to 21 as possible and compete against the dealer.
-  Tomo Playground - Tomo Playground - A mini-game where Tomo's virtual pet can socialize with others and earn happiness points.
+- Tomo Playground - A mini-game where Tomo's virtual pet can socialize with others and earn happiness points.
 
 ## Repository structure
 
