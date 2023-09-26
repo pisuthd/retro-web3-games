@@ -133,7 +133,7 @@ const Shortcuts = () => {
           />
           Minesweeper
         </IconContainer>
-        <IconContainer
+        {/* <IconContainer
           onClick={() => showPetSitterModal()}
         >
           <img
@@ -143,7 +143,7 @@ const Shortcuts = () => {
             className="pointer"
           />
           Tomo Playground
-        </IconContainer>
+        </IconContainer> */}
         <IconContainer
           onClick={() => showMarketplaceModal()}
         >

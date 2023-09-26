@@ -35,6 +35,7 @@ const About = ({
                 width="100%"
                 padding="0px 5px"
             >
+                <h2 style={{textAlign :"center"}}>UNDER MAINTENANCE - BE BACK SOON</h2>
                 <p>
                     RetroWeb3.Games is a platform for classic/retro/mini games in Web3 on the Oasys L-2 Sakuuru blockchain utilizing Merkle Tree verification for a fully on-chain experience and enjoys a secure and transparent gaming environment.
                 </p>
@@ -44,7 +45,7 @@ const About = ({
                         <ul>
                             <li>Minesweeper - A puzzle game where you flag hidden mines with Flag NFT and the person who flags the last mine will win the prize pool.</li>
                             <li>Blackjack - A classic card game where the objective is to have a hand value as close to 21 as possible and compete against the dealer.</li>
-                            <li>Tomo Playground - A mini-game where Tomo's virtual pet can socialize with others and earn happiness points.</li>
+                            {/* <li>Tomo Playground - A mini-game where Tomo's virtual pet can socialize with others and earn happiness points.</li> */}
                         </ul>
                     </div>
                 </div>

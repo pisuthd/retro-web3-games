@@ -20,8 +20,8 @@ const Provider = ({ children }) => {
     const [values, dispatch] = useReducer(
         (curVal, newVal) => ({ ...curVal, ...newVal }),
         {
-            // modals: [MODAL.ABOUT]
-            modals: []
+            modals: [MODAL.ABOUT]
+            // modals: []
         }
     )
 

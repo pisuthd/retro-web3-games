@@ -82,7 +82,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                     >
                                         Minesweeper
                                     </List.Item>
-                                    <List.Item
+                                    {/* <List.Item
                                         icon={<img
                                             src={"/pet-sitter-icon.png"}
                                             height={16}
@@ -91,7 +91,7 @@ const Taskbar = forwardRef(({ list }, ref) => {
                                         onClick={() => showPetSitterModal()}
                                     >
                                         Tomo Playground
-                                    </List.Item>
+                                    </List.Item> */}
                                     {/* <List.Item
                                         icon={<img
                                             src={"/icons/marketplace-icon-3.png"}
