@@ -10,13 +10,13 @@
     "@testing-library/user-event": "^13.5.0",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "6.0.7",
+    "@xstyled/styled-components": "^3.8.0",
     "axios": "^1.4.0",
     "ethers": "5.7.1",
     "react": "^18.2.0",
     "react-blockies": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "styled-components": "5.3.11",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
