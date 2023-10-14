@@ -4,35 +4,32 @@ import { MINT_ITEMS } from "@/constants"
 import { useCallback, useContext } from "react"
 import { PanelContext } from "@/hooks/usePanel"
 
-const CardItem = ({
-    index,
+const CardItem = ({ 
     slug,
     open,
     item
 }) => {
 
     return (
-        <div key={index} className="col-span-1">
-            <div onClick={() => open(slug)} class="   p-2 border rounded border-solid hover:border-blue-700 hover:cursor-pointer">
-                <div className="w-full grid grid-cols-6">
-                    <div class="col-span-2 flex pt-2 pb-2">
-                        <div class="w-[80px] h-[80px] m-auto flex">
-                            <img src={item.image} className="m-auto" />
-                        </div>
-                    </div> 
-                    <div class="col-span-2 flex">
-                        <div class="mt-auto mb-auto text-xs">
-                            <p>
-                            {item.gameName}{`'s `} {item.itemName}
-                            </p> 
-                        </div>
+        <div onClick={() => open(slug)} class="   p-2 border rounded border-solid hover:border-blue-700 hover:cursor-pointer">
+            <div className="w-full grid grid-cols-6">
+                <div class="col-span-2 flex pt-2 pb-2">
+                    <div class="w-[80px] h-[80px] m-auto flex">
+                        <img src={item.image} className="m-auto" />
                     </div>
-                    <div class="col-span-2 flex">
-                        <div class="mt-auto mb-auto text-xs"> 
-                            <p>
-                                {item.perEpoch} Units per Epoch
-                            </p>
-                        </div>
+                </div>
+                <div class="col-span-2 flex">
+                    <div class="mt-auto mb-auto text-xs">
+                        <p>
+                            {item.gameName}{`'s `} {item.itemName}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-span-2 flex">
+                    <div class="mt-auto mb-auto text-xs">
+                        <p>
+                            {item.perEpoch} Units per Epoch
+                        </p>
                     </div>
                 </div>
             </div>
@@ -65,12 +62,13 @@ const SelectModal = ({ visible, close }) => {
                         const slug = `${slugify(`${item.gameName}-${item.itemName}`)}`
 
                         return (
-                            <CardItem
-                                index={index}
-                                item={item}
-                                slug={slug}
-                                open={onOpen}
-                            />
+                            <div key={index} className="col-span-1">
+                                <CardItem
+                                    item={item}
+                                    slug={slug}
+                                    open={onOpen}
+                                />
+                            </div>
                         )
                     })}
                 </div>
