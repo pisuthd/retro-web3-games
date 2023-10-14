@@ -2,6 +2,11 @@ import Image from 'next/image'
 import { Quicksand } from 'next/font/google'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import { MagicPassJumbotron } from '@/components/jumbotron'
+import MyStaking from '@/components/myStaking'
+import AllItems from '@/components/allItems'
+import HowToStake from '@/components/howToStake'
+import RecentListing from '@/components/recentListing'
 
 const quicksand = Quicksand({
   weight: '400',
@@ -15,11 +20,14 @@ export default function Home() {
     >
       <Header />
 
-      <div className='text-center  p-6 text-4xl'>
-         <h2>Will be available soon</h2>
-      </div>
+      <MagicPassJumbotron/>
+      <MyStaking/>
+      {/* <HowToStake/> */}
+     
+      <RecentListing/>
 
      
+
       <Footer/>
     </main>
   )

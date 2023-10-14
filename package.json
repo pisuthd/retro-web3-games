@@ -9,6 +9,7 @@
     "build": "lerna run --parallel build",
     "start": "run-p --print-label package:*",
     "package:console": "lerna run --scope console --stream start",
+    "package:marketplace": "lerna run --scope marketplace --stream dev",
     "package:app": "lerna run --scope app --stream dev",
     "test": "lerna run test --concurrency 1 --stream"
   },
